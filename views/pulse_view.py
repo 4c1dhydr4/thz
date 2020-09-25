@@ -18,10 +18,12 @@ class PulseView(QWidget):
 		self.canvas = FigureCanvas(self.fig)
 		vertical_layout = QVBoxLayout()
 		vertical_layout.addWidget(self.canvas)
-		self.canvas.axes = self.fig.add_axes([0.125,0.11,0.85,0.85])
+		self.canvas.axes = self.fig.add_axes([0.08,0.15,0.90,0.80])
 		self.canvas.axes.grid(True)
 		self.setLayout(vertical_layout)
 		self.canvas.axes.clear()
+		self.canvas.axes.set_xlabel('Optical Delay (ps)')
+		self.canvas.axes.set_ylabel('Terahertz Signal')
 		self.canvas.draw()
 		self.cli = self.canvas.mpl_connect('button_press_event', self.onclick)
 		self.max = 0
@@ -40,13 +42,19 @@ class PulseView(QWidget):
 
 	def set_cursor(self):
 		self.cursor = Cursor(self.canvas.axes, 
-			useblit=False, color='blue', linewidth=1, linestyle='--')
+			useblit=False, color='blue', linewidth=.5, linestyle='--')
 		self.cursor.horizOn = False
 
 	def plot(self, data, **kwargs):
 		self.data = data
 		self.canvas.axes.clear()
-		self.canvas.axes.plot(self.data, **kwargs)
-		self.canvas.axes.plot([self.row,self.row], [0,max(self.data)], 'r-.', lw=.5)
+		self.canvas.axes.plot(self.data, 
+			color='green', linewidth=0.5, markersize=12, **kwargs)
+		self.canvas.axes.plot(
+			[self.row,self.row], 
+			[min(self.data),max(self.data)], 
+			'r--', lw=.5)
+		self.canvas.axes.set_xlabel('Optical Delay (ps)')
+		self.canvas.axes.set_ylabel('Terahertz Signal')
 		self.set_cursor()
 		self.draw()

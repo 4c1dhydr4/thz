@@ -4,12 +4,13 @@ from components.combos import (fill_interpolation_cb, fill_cmaptype_cb, change_c
 from components.progress import (set_progress,)
 
 def load_test(self):
-	self.file_path = 'D:\\THz\\Samples\\5.csv'
-	self.progress = set_progress('Loading THZImage')
+	self.file_path = 'D:\\THz\\Samples\\1.csv'
+	self.progress = set_progress('Loading THz Image')
 	self.thz_img = THZImage(self.file_path, self.progress)
 	self.progress.close()
 	self.img_view.pulse_view = self.pulse_view
 	self.img_view.thz_img = self.thz_img
+	self.img_view.index_label = self.index_label
 	self.pulse_view.max = self.thz_img.dataset.shape[0]-1
 	self.pulse_view.imaging = self._imaging
 	self.pulse_view.plot(self.thz_img.get_column_index(0,0))
@@ -45,6 +46,6 @@ def main__name__(Ui_MainWindow):
 	MainWindow = QtWidgets.QMainWindow()
 	ui = Ui_MainWindow()
 	ui.setupUi(MainWindow)
-	# ui._load_test()
+	ui._load_test()
 	MainWindow.show()
 	sys.exit(app.exec_())

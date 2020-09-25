@@ -27,12 +27,16 @@ class ImgView(QWidget):
 		self.canvas.axes.clear()
 		self.canvas.axes.set_axis_off()
 		self.canvas.draw()
+		self.lx = self.canvas.axes.axhline()
+		self.ly = self.canvas.axes.axvline()
 		self.cli = self.canvas.mpl_connect('button_press_event', self.onclick)
 		self.layout().addWidget(self.toolbar)
 
 	def onclick(self,event):
 		self.ix, self.iy = int(event.xdata), int(event.ydata)
-		self.pulse_view.plot(self.thz_img.get_column_index(self.ix, self.iy))
+		self.pulse_view.plot(
+			self.thz_img.get_column_index(self.ix, self.iy))
+		self.index_label.setText('Pixel Index: [{},{}]'.format(self.ix, self.iy))
 
 	def clear_axes(self):
 		self.canvas.axes.clear()
