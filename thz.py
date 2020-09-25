@@ -10,19 +10,23 @@ class THZImage():
 	x_max = 0.0
 	y_min = 0.0
 	y_max = 0.0
-	pixels = 0.0
-	y_pixels = 0.0
-	x_pixels = 0.0
+	pixels = []
+	y_pixels = []
+	x_pixels = []
 	weights = tuple()
 
-	def __init__(self, path, progressBar=None):
+	def __init__(self, path, progress=None):
 		self.file_path = path
-		self.load_dataset(progressBar)
+		self.load_dataset(progress)
 
-	def load_dataset(self, progressBar=None):
+	def load_dataset(self, progress=None):
 		with open(self.file_path) as csv_file:
 			csv_reader = csv.reader(csv_file, delimiter=',')
+			row_count = sum(1 for row in csv_reader)
+			csv_file.seek(0)
 			line = 0
+			if progress:
+				progress.setRange(line,row_count)
 			for row in csv_reader:
 				if line == 0:
 					self.filename = row[1]
@@ -48,11 +52,12 @@ class THZImage():
 				elif line == 11:
 					pass
 				else:
-					step = 0
 					lrow = np.array([float(d) for d in row[1::] if d != ''])
 					if len(lrow) != 0:
 						self.dataset.append(lrow)
 				line += 1
+				if progress:
+					progress.setValue(line)
 			self.dataset = np.array(self.dataset)
 
 	def get_row(self,row):
@@ -61,5 +66,11 @@ class THZImage():
 	def get_column(self,column):
 		return self.dataset[:, column]
 
+	def get_column_index(self, x, y):
+		for index in range(0,len(self.x_pixels)):
+			if x==self.x_pixels[index] and y==self.y_pixels[index]:
+				return self.get_column(index)
+
+
 	def get_img(self, row):
-		return np.reshape(self.dataset[row,:],(self.rows, self.colums))
+		return np.reshape(self.dataset[row,:], self.weights)
