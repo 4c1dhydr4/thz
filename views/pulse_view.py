@@ -18,43 +18,66 @@ class PulseView(QWidget):
 		self.canvas = FigureCanvas(self.fig)
 		vertical_layout = QVBoxLayout()
 		vertical_layout.addWidget(self.canvas)
-		self.canvas.axes = self.fig.add_axes([0.08,0.15,0.90,0.80])
-		self.canvas.axes.grid(True)
+		self.canvas.axes = self.fig.add_axes([0.11,0.15,0.90,0.80])
+		self.ax = self.canvas.axes
+		self.ax.grid(True)
 		self.setLayout(vertical_layout)
-		self.canvas.axes.clear()
-		self.canvas.axes.set_xlabel('Optical Delay (ps)')
-		self.canvas.axes.set_ylabel('Terahertz Signal')
-		self.canvas.draw()
+		self.ax.clear()
+		self.ax.set_xlabel('Optical Delay (ps)')
+		self.ax.set_ylabel('Terahertz Signal')
 		self.cli = self.canvas.mpl_connect('button_press_event', self.onclick)
-		self.max = 0
+		self.move = self.canvas.mpl_connect('motion_notify_event', self.onmove)
 		self.row = 0
+		self.data = None
+		self.canvas.draw()
 
 	def onclick(self,event):
 		ix = int(event.xdata)
-		if ix >= 0 and ix <= self.max:
+		max_val = self.app.thz_img.dataset.shape[0]-1
+		if ix >= 0 and ix <= max_val:
 			self.row = ix
 			self.plot(self.data)
-			self.imaging()
+			self.app._imaging()
+			self.set_app_values()
+
+	def onmove(self, event):
+		if not event.inaxes:
+			return
+		x, y = event.xdata, event.ydata
+		self.app.cursor_label.setText('Cursor Point: [%.1f,%.1f]'%(x,y))
+
+	def set_app_values(self):
+		self.app.waveform_point_label.setText('Time Point: {}'.format(self.row))
+		self.app.signal_label.setText('Signal Value: {}'.format(self.data[self.row]))		
 
 	def draw(self):
 		self.canvas.draw()
 		self.canvas.show()
 
 	def set_cursor(self):
-		self.cursor = Cursor(self.canvas.axes, 
+		self.cursor = Cursor(self.ax, 
 			useblit=False, color='blue', linewidth=.5, linestyle='--')
 		self.cursor.horizOn = False
 
 	def plot(self, data, **kwargs):
 		self.data = data
-		self.canvas.axes.clear()
-		self.canvas.axes.plot(self.data, 
+		x_points = (self.row, self.row)
+		y_points = (min(self.data),max(self.data))
+		self.ax.clear()
+		self.ax.plot(self.data, 
 			color='green', linewidth=0.5, markersize=12, **kwargs)
-		self.canvas.axes.plot(
-			[self.row,self.row], 
-			[min(self.data),max(self.data)], 
+		self.ax.plot(
+			x_points,
+			y_points, 
 			'r--', lw=.5)
-		self.canvas.axes.set_xlabel('Optical Delay (ps)')
-		self.canvas.axes.set_ylabel('Terahertz Signal')
+		self.ax.text(
+			x_points[0], 
+			y_points[1]/2.5, 'Time Point',
+			fontsize=6,
+			color='red',
+			rotation='vertical',
+			rotation_mode='anchor')
+		self.ax.set_xlabel('Optical Delay (ps)')
+		self.ax.set_ylabel('Terahertz Signal')
 		self.set_cursor()
 		self.draw()

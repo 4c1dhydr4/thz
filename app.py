@@ -1,6 +1,7 @@
 from PyQt5 import (QtCore, QtGui, QtWidgets,)
 from thz import (THZImage,)
-from components.combos import (fill_interpolation_cb, fill_cmaptype_cb, change_cmap_cb,)
+from components.combos import (fill_interpolation_cb, fill_cmaptype_cb, change_cmap_cb,
+	fill_image_view_mode_cb,)
 from components.progress import (set_progress,)
 
 def load_test(self):
@@ -8,11 +9,8 @@ def load_test(self):
 	self.progress = set_progress('Loading THz Image')
 	self.thz_img = THZImage(self.file_path, self.progress)
 	self.progress.close()
-	self.img_view.pulse_view = self.pulse_view
-	self.img_view.thz_img = self.thz_img
-	self.img_view.index_label = self.index_label
-	self.pulse_view.max = self.thz_img.dataset.shape[0]-1
-	self.pulse_view.imaging = self._imaging
+	self.img_view.app = self
+	self.pulse_view.app = self
 	self.pulse_view.plot(self.thz_img.get_column_index(0,0))
 	self._imaging()
 
@@ -28,10 +26,11 @@ def imaging(self):
 
 def cmaptype(self):
 	option = str(self.cmaptype_cb.currentText())
-	change_cmap_cb(option, self.cmap_cb)
+	change_cmap_cb(option, self.cmap_cb, self.first_load)
 
 def set_main_definitions(self):
 	# Setear funciones a controles de interfaz con cada objeto (botones, sliders, etc.)
+	self.first_load = True
 	self.thz_img = None
 	self.testButton.clicked.connect(self._load_test)
 	self.cmaptype_cb.currentTextChanged.connect(self._cmaptype)
@@ -39,6 +38,10 @@ def set_main_definitions(self):
 	self.interpolation_cb.currentTextChanged.connect(self._imaging)
 	fill_interpolation_cb(self.interpolation_cb)
 	fill_cmaptype_cb(self.cmaptype_cb)
+	fill_image_view_mode_cb(self.view_mode_cb)
+	self.waveform_point_label.setText('Time Point: 0')
+	self.index_label.setText('Pixel Index: [0,0]')
+	self.first_load = False
 
 def main__name__(Ui_MainWindow):
 	import sys

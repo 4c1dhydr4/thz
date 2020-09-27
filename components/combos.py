@@ -4,6 +4,7 @@ def fill_interpolation_cb(cb):
 		'spline36', 'hanning', 'hamming', 'hermite', 'kaiser', 'quadric',
 		'catrom', 'gaussian', 'bessel', 'mitchell', 'sinc', 'lanczos')
 	cb.addItems(options)
+	cb.setCurrentIndex(6) 
 
 def fill_cmaptype_cb(cb):
 	options = ('Perceptually Uniform Sequential',
@@ -12,7 +13,7 @@ def fill_cmaptype_cb(cb):
 		'Miscellaneous')
 	cb.addItems(options)
 
-def change_cmap_cb(option, cb):
+def change_cmap_cb(option, cb, first_load=False):
 		cmaps = {
 			'Perceptually Uniform Sequential': ('viridis', 'plasma', 'inferno', 'magma', 'cividis'),
 			'Sequential': ('Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds','YlOrBr', 'YlOrRd', 'OrRd', 'PuRd', 'RdPu', 'BuPu','GnBu', 'PuBu', 'YlGnBu', 'PuBuGn', 'BuGn', 'YlGn'),
@@ -24,3 +25,15 @@ def change_cmap_cb(option, cb):
 		}
 		cb.clear()
 		cb.addItems(cmaps[option])
+		if first_load:
+			cb.setCurrentIndex(2)
+
+
+def fill_image_view_mode_cb(cb):
+	option = (
+		'Time Domain',
+		'Frequency Domain',
+		'Transmittance',
+		'Absorbance',
+	)
+	cb.addItems(option)
