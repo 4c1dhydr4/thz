@@ -37,6 +37,8 @@ class ImgView(QWidget):
 			self.app.thz_img.get_column_index(self.ix, self.iy))
 		self.set_app_values()
 		self.app.pulse_view.set_app_values()
+		self.app._imaging()
+		self.canvas.draw()
 
 	def set_app_values(self):
 		self.app.index_label.setText('Pixel Index: [{},{}]'.format(self.ix, self.iy))
@@ -49,6 +51,7 @@ class ImgView(QWidget):
 		self.img = img
 		self.ax.clear()
 		self.ax.imshow(self.img, **kwargs)
+		self.ax.scatter(self.ix, self.iy, edgecolors='k',color='r')
 		self.ax.set_axis_off()
 		self.canvas.draw()
 		self.canvas.show()

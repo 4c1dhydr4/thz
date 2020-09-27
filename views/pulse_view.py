@@ -33,7 +33,7 @@ class PulseView(QWidget):
 		self.canvas.mpl_connect('scroll_event', self.onscroll)
 
 	def onload(self):
-		self.max_row = self.app.thz_img.dataset.shape[0]
+		self.max_row = self.app.thz_img.dataset.shape[0]-1
 
 	def refresh(self):
 		self.plot(self.data)
