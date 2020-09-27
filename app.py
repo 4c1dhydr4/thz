@@ -5,12 +5,13 @@ from components.combos import (fill_interpolation_cb, fill_cmaptype_cb, change_c
 from components.progress import (set_progress,)
 
 def load_test(self):
-	self.file_path = 'D:\\THz\\Samples\\1.csv'
+	self.file_path = 'D:\\THz\\Samples\\3.csv'
 	self.progress = set_progress('Loading THz Image')
 	self.thz_img = THZImage(self.file_path, self.progress)
 	self.progress.close()
 	self.img_view.app = self
 	self.pulse_view.app = self
+	self.pulse_view.onload()
 	self.pulse_view.plot(self.thz_img.get_column_index(0,0))
 	self._imaging()
 

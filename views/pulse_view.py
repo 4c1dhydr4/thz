@@ -25,26 +25,45 @@ class PulseView(QWidget):
 		self.ax.clear()
 		self.ax.set_xlabel('Optical Delay (ps)')
 		self.ax.set_ylabel('Terahertz Signal')
-		self.cli = self.canvas.mpl_connect('button_press_event', self.onclick)
-		self.move = self.canvas.mpl_connect('motion_notify_event', self.onmove)
 		self.row = 0
 		self.data = None
 		self.canvas.draw()
+		self.canvas.mpl_connect('button_press_event', self.onclick)
+		self.canvas.mpl_connect('motion_notify_event', self.onmove)
+		self.canvas.mpl_connect('scroll_event', self.onscroll)
+
+	def onload(self):
+		self.max_row = self.app.thz_img.dataset.shape[0]
+
+	def refresh(self):
+		self.plot(self.data)
+		self.app._imaging()
+		self.set_app_values()
 
 	def onclick(self,event):
 		ix = int(event.xdata)
-		max_val = self.app.thz_img.dataset.shape[0]-1
-		if ix >= 0 and ix <= max_val:
+		if ix >= 0 and ix <= self.max_row:
 			self.row = ix
-			self.plot(self.data)
-			self.app._imaging()
-			self.set_app_values()
+			self.refresh()
 
 	def onmove(self, event):
 		if not event.inaxes:
 			return
 		x, y = event.xdata, event.ydata
 		self.app.cursor_label.setText('Cursor Point: [%.1f,%.1f]'%(x,y))
+
+	def onscroll(self, event):
+		if event.button == 'up':
+			self.row += 1
+		elif event.button == 'down':
+			self.row -= 1
+
+		if self.row < 0:
+			self.row = 0
+		elif self.row > self.max_row:
+			self.row = self.max_row
+
+		self.refresh()
 
 	def set_app_values(self):
 		self.app.waveform_point_label.setText('Time Point: {}'.format(self.row))
