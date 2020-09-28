@@ -3,17 +3,22 @@ import numpy as np
 
 class THZImage():
 	dataset = []
-	file_path = ""
+	file_path = ''
+	filename = ''
 	rows = 0.0
-	colums = 0.0
+	columns = 0.0
 	x_min = 0.0
 	x_max = 0.0
 	y_min = 0.0
 	y_max = 0.0
+	n_waveforms = 0
 	pixels = []
 	y_pixels = []
 	x_pixels = []
 	weights = tuple()
+	dataset = []
+	reference = []
+	has_reference = False
 
 	def __init__(self, path, progress=None):
 		self.file_path = path
@@ -22,19 +27,18 @@ class THZImage():
 	def load_dataset(self, progress=None):
 		with open(self.file_path) as csv_file:
 			csv_reader = csv.reader(csv_file, delimiter=',')
-			row_count = sum(1 for row in csv_reader)
-			csv_file.seek(0)
 			line = 0
 			if progress:
-				progress.setRange(line,row_count)
+				progress.setRange(line, len([1 for row in csv_reader]))
+				csv_file.seek(0)
 			for row in csv_reader:
 				if line == 0:
 					self.filename = row[1]
 				elif line == 1:
 					self.rows = int(row[1])
 				elif line == 2:
-					self.colums = int(row[1])
-					self.weights = (self.rows, self.colums)
+					self.columns = int(row[1])
+					self.weights = (self.rows, self.columns)
 				elif line == 3:
 					self.x_min = float(row[1])
 				elif line == 4:
@@ -54,11 +58,16 @@ class THZImage():
 				else:
 					lrow = np.array([float(d) for d in row[1::] if d != ''])
 					if len(lrow) != 0:
+						self.reference.append(float(row[0]))
 						self.dataset.append(lrow)
 				line += 1
 				if progress:
 					progress.setValue(line)
 			self.dataset = np.array(self.dataset)
+			self.n_waveforms, self.n_pixels = self.dataset.shape
+			self.reference = np.array(self.reference)
+			if self.reference.sum() != 0:
+				self.has_reference = True
 
 	def get_row(self,row):
 		return self.dataset[row, :]
@@ -67,10 +76,21 @@ class THZImage():
 		return self.dataset[:, column]
 
 	def get_column_index(self, x, y):
-		for index in range(0,len(self.x_pixels)):
+		for index in range(0,self.n_waveforms):
 			if x==self.x_pixels[index] and y==self.y_pixels[index]:
 				return self.get_column(index)
 
-
 	def get_img(self, row):
 		return np.reshape(self.dataset[row,:], self.weights)
+
+	def get_image_details(self):
+		txt = 'Image Name: {}\n'.format(self.filename)
+		txt += 'Reference Pulse: {}\n'.format('Yes' if self.has_reference else 'No')
+		txt += 'Waveforms: {}\n'.format(self.n_waveforms)
+		txt += 'Pixels (Total Pulses): {}\n'.format(self.n_pixels)
+		txt += 'Image Rows: {}\n'.format(self.rows)
+		txt += 'Image Columns: {}\n'.format(self.columns)
+		txt += 'X Range:\n -Min: {}\n -Max:{}\n'.format(self.x_min, self.x_max)
+		txt += 'Y Range:\n -Min: {}\n -Max:{}\n'.format(self.y_min, self.y_max)
+		txt += 'File Path:\n {}\n'.format(self.file_path)
+		return txt

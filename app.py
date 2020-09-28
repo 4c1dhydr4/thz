@@ -4,14 +4,18 @@ from components.combos import (fill_interpolation_cb, fill_cmaptype_cb, change_c
 	fill_image_view_mode_cb,)
 from components.progress import (set_progress,)
 
-def load_test(self):
-	self.file_path = 'D:\\THz\\Samples\\3.csv'
-	self.progress = set_progress('Loading THz Image')
-	self.thz_img = THZImage(self.file_path, self.progress)
-	self.progress.close()
+def on_load(self):
 	self.img_view.app = self
 	self.pulse_view.app = self
 	self.pulse_view.onload()
+	self.sample_info_text.setPlainText(self.thz_img.get_image_details())
+
+def load_test(self):
+	self.file_path = 'D:\\THz\\Samples\\Arandano_02.csv'
+	self.progress = set_progress('Loading THz Image')
+	self.thz_img = THZImage(self.file_path, self.progress)
+	self.progress.close()
+	on_load(self)
 	self.pulse_view.plot(self.thz_img.get_column_index(0,0))
 	self._imaging()
 
@@ -42,6 +46,7 @@ def set_main_definitions(self):
 	fill_image_view_mode_cb(self.view_mode_cb)
 	self.waveform_point_label.setText('Time Point: 0')
 	self.index_label.setText('Pixel Index: [0,0]')
+	self.sample_info_text.setReadOnly(True)
 	self.first_load = False
 
 def main__name__(Ui_MainWindow):

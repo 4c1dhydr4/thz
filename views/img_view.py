@@ -51,7 +51,7 @@ class ImgView(QWidget):
 		self.img = img
 		self.ax.clear()
 		self.ax.imshow(self.img, **kwargs)
-		self.ax.scatter(self.ix, self.iy, edgecolors='k',color='r')
+		self.ax.scatter(self.ix, self.iy, edgecolors='w',color='r')
 		self.ax.set_axis_off()
 		self.canvas.draw()
 		self.canvas.show()

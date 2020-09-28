@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1291</width>
+    <width>1336</width>
     <height>680</height>
    </rect>
   </property>
@@ -27,8 +27,8 @@
    <widget class="QPushButton" name="testButton">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>610</y>
+      <x>740</x>
+      <y>590</y>
       <width>201</width>
       <height>23</height>
      </rect>
@@ -42,7 +42,7 @@
      <rect>
       <x>510</x>
       <y>40</y>
-      <width>771</width>
+      <width>821</width>
       <height>371</height>
      </rect>
     </property>
@@ -155,7 +155,7 @@
       <x>940</x>
       <y>410</y>
       <width>131</width>
-      <height>16</height>
+      <height>22</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -192,7 +192,7 @@
       <x>520</x>
       <y>430</y>
       <width>201</width>
-      <height>151</height>
+      <height>201</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -232,6 +232,29 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Sample Information:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_6">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPlainTextEdit" name="sample_info_text"/>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="horizontalLayoutWidget_2">
@@ -240,7 +263,7 @@
       <x>670</x>
       <y>410</y>
       <width>101</width>
-      <height>16</height>
+      <height>22</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -277,7 +300,7 @@
       <x>520</x>
       <y>410</y>
       <width>151</width>
-      <height>16</height>
+      <height>22</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -309,7 +332,7 @@
       <x>780</x>
       <y>410</y>
       <width>151</width>
-      <height>16</height>
+      <height>22</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -346,7 +369,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1291</width>
+     <width>1336</width>
      <height>21</height>
     </rect>
    </property>
