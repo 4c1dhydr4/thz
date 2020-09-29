@@ -37,11 +37,12 @@ class ImgView(QWidget):
 
 	def refresh(self):
 		if self.control_coords():
-			self.app.pulse_view.plot(
-				self.app.thz_img.get_column_index(self.ix, self.iy))
+			self.app.pulse = self.app.thz_img.get_column_index(self.ix, self.iy)
+			self.app.pulse_view.plot(self.app.pulse)
 			self.set_app_values()
 			self.app.pulse_view.set_app_values()
 			self.app._imaging()
+			self.app.plots_view.refresh(self.app.pulse)
 			self.canvas.draw()
 
 	def control_coords(self):

@@ -26,7 +26,6 @@ class PulseView(QWidget):
 		self.ax.set_xlabel('Optical Delay (ps)')
 		self.ax.set_ylabel('Terahertz Signal')
 		self.row = 0
-		self.data = None
 		self.canvas.draw()
 		self.canvas.mpl_connect('button_press_event', self.onclick)
 		self.canvas.mpl_connect('motion_notify_event', self.onmove)
@@ -35,8 +34,8 @@ class PulseView(QWidget):
 	def onload(self):
 		self.max_row = self.app.thz_img.dataset.shape[0]-1
 
-	def refresh(self):
-		self.plot(self.data)
+	def refresh(self, data):
+		self.plot(data)
 		self.app._imaging()
 		self.set_app_values()
 
@@ -44,7 +43,7 @@ class PulseView(QWidget):
 		ix = int(event.xdata)
 		if ix >= 0 and ix <= self.max_row:
 			self.row = ix
-			self.refresh()
+			self.refresh(self.app.pulse)
 
 	def onmove(self, event):
 		if not event.inaxes:
@@ -63,11 +62,11 @@ class PulseView(QWidget):
 		elif self.row > self.max_row:
 			self.row = self.max_row
 
-		self.refresh()
+		self.refresh(self.app.pulse)
 
 	def set_app_values(self):
 		self.app.waveform_point_label.setText('Time Point: {}'.format(self.row))
-		self.app.signal_label.setText('Signal Value: {}'.format(self.data[self.row]))		
+		self.app.signal_label.setText('Signal Value: {}'.format(self.app.pulse[self.row]))		
 
 	def draw(self):
 		self.canvas.draw()
@@ -79,11 +78,10 @@ class PulseView(QWidget):
 		self.cursor.horizOn = False
 
 	def plot(self, data, **kwargs):
-		self.data = data
 		x_points = (self.row, self.row)
-		y_points = (min(self.data),max(self.data))
+		y_points = (min(data), max(data))
 		self.ax.clear()
-		self.ax.plot(self.data, 
+		self.ax.plot(data, 
 			color='green', linewidth=0.5, markersize=12, **kwargs)
 		self.ax.plot(
 			x_points,

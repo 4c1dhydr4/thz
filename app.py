@@ -7,8 +7,13 @@ from components.progress import (set_progress,)
 def on_load(self):
 	self.img_view.app = self
 	self.pulse_view.app = self
+	self.plots_view.app = self
 	self.pulse_view.onload()
+	self.plots_view.onload()
 	self.sample_info_text.setPlainText(self.thz_img.get_image_details())
+	self.pulse = self.thz_img.get_column_index(0,0)
+	self.pulse_view.refresh(self.pulse)
+	self.plots_view.refresh(self.pulse)
 
 def load_test(self):
 	self.file_path = 'D:\\THz\\Samples\\Arandano_02.csv'
@@ -16,8 +21,6 @@ def load_test(self):
 	self.thz_img = THZImage(self.file_path, self.progress)
 	self.progress.close()
 	on_load(self)
-	self.pulse_view.data = self.thz_img.get_column_index(0,0)
-	self.pulse_view.refresh()
 
 def imaging(self):
 	if self.thz_img:
@@ -66,7 +69,6 @@ def set_main_definitions(self, MainWindow):
 
 def refresh(self):
 	self.img_view.refresh()
-	self.pulse_view.refresh()
 
 def main__name__(Ui_MainWindow):
 	import sys
