@@ -145,7 +145,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        set_main_definitions(self)
+        set_main_definitions(self, MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -162,6 +162,9 @@ class Ui_MainWindow(object):
         self.cursor_label.setText(_translate("MainWindow", "Cursor Point:"))
         self.signal_label.setText(_translate("MainWindow", "Signal Value:"))
 
+    def _refresh(self):
+        refresh(self)
+
     def _load_test(self):
         load_test(self)
 
@@ -176,6 +179,9 @@ class Ui_MainWindow(object):
 
     def _interpolation(self):
         interpolation(self)
+    
+    def _key_press_event(self, event):
+        key_press_event(self, event)
 
 if __name__ == "__main__":
     main__name__(Ui_MainWindow)

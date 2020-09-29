@@ -1,9 +1,9 @@
 from PyQt5.QtWidgets import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 from matplotlib.widgets import LassoSelector, Cursor
+# from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 # from matplotlib.path import Path
 # from matplotlib import patches as patches
 # import random
@@ -23,22 +23,42 @@ class ImgView(QWidget):
 		vertical_layout.addWidget(self.canvas)
 		self.canvas.axes = self.fig.add_axes([0, 0, 1, 1])
 		self.ax = self.canvas.axes
-		self.toolbar = NavigationToolbar(self.canvas, self)
+		# self.toolbar = NavigationToolbar(self.canvas, self)
 		self.setLayout(vertical_layout)
 		self.ax.clear()
 		self.ax.set_axis_off()
 		self.canvas.draw()
 		self.cli = self.canvas.mpl_connect('button_press_event', self.onclick)
-		self.layout().addWidget(self.toolbar)
+		# self.layout().addWidget(self.toolbar)
 
 	def onclick(self,event):
 		self.ix, self.iy = int(event.xdata), int(event.ydata)
-		self.app.pulse_view.plot(
-			self.app.thz_img.get_column_index(self.ix, self.iy))
-		self.set_app_values()
-		self.app.pulse_view.set_app_values()
-		self.app._imaging()
-		self.canvas.draw()
+		self.refresh()
+
+	def refresh(self):
+		if self.control_coords():
+			self.app.pulse_view.plot(
+				self.app.thz_img.get_column_index(self.ix, self.iy))
+			self.set_app_values()
+			self.app.pulse_view.set_app_values()
+			self.app._imaging()
+			self.canvas.draw()
+
+	def control_coords(self):
+		if self.ix < 0:
+			self.ix = 0
+			return False
+		elif self.ix > self.app.thz_img.columns-1:
+			self.ix = self.app.thz_img.columns-1
+			return False
+		elif self.iy < 0:
+			self.iy = 0
+			return False
+		elif self.iy > self.app.thz_img.rows-1:
+			self.iy = self.app.thz_img.rows-1
+			return False
+		else:
+			return True
 
 	def set_app_values(self):
 		self.app.index_label.setText('Pixel Index: [{},{}]'.format(self.ix, self.iy))
@@ -51,7 +71,7 @@ class ImgView(QWidget):
 		self.img = img
 		self.ax.clear()
 		self.ax.imshow(self.img, **kwargs)
-		self.ax.scatter(self.ix, self.iy, edgecolors='w',color='r')
+		self.ax.scatter(self.ix, self.iy, edgecolors='w', color='r', alpha=0.5)
 		self.ax.set_axis_off()
 		self.canvas.draw()
 		self.canvas.show()

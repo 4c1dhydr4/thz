@@ -16,8 +16,8 @@ def load_test(self):
 	self.thz_img = THZImage(self.file_path, self.progress)
 	self.progress.close()
 	on_load(self)
-	self.pulse_view.plot(self.thz_img.get_column_index(0,0))
-	self._imaging()
+	self.pulse_view.data = self.thz_img.get_column_index(0,0)
+	self.pulse_view.refresh()
 
 def imaging(self):
 	if self.thz_img:
@@ -33,7 +33,21 @@ def cmaptype(self):
 	option = str(self.cmaptype_cb.currentText())
 	change_cmap_cb(option, self.cmap_cb, self.first_load)
 
-def set_main_definitions(self):
+def key_press_event(self, event):
+	key = event.key()
+	if key == 65:
+		self.img_view.ix -= 1
+	elif key == 68:
+		self.img_view.ix += 1
+	elif key == 87:
+		self.img_view.iy -= 1
+	elif key == 83:
+		self.img_view.iy += 1
+	
+	if self.img_view.control_coords():
+		self._refresh()
+
+def set_main_definitions(self, MainWindow):
 	# Setear funciones a controles de interfaz con cada objeto (botones, sliders, etc.)
 	self.first_load = True
 	self.thz_img = None
@@ -47,7 +61,12 @@ def set_main_definitions(self):
 	self.waveform_point_label.setText('Time Point: 0')
 	self.index_label.setText('Pixel Index: [0,0]')
 	self.sample_info_text.setReadOnly(True)
+	MainWindow.keyPressEvent = self._key_press_event
 	self.first_load = False
+
+def refresh(self):
+	self.img_view.refresh()
+	self.pulse_view.refresh()
 
 def main__name__(Ui_MainWindow):
 	import sys
