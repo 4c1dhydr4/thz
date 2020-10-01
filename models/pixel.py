@@ -17,6 +17,39 @@ class Pixel():
 		self.color = get_rand_color()
 		self.pulse = thz_img.get_column_index(ix, iy)
 		self.id = id
+		self.is_checked = True
+
+	def change_color(self):
+		self.color = get_rand_color()
+
+	def set_checked(self):
+		self.is_checked = True
+
+	def set_unchecked(self):
+		self.is_checked = False
+
+
+def set_all_unchecked(self):
+	for pixel in self.pixel_list:
+		pixel.set_unchecked()
+
+def selected_pixels_tree(self):
+	set_all_unchecked(self)
+	pixel_ids = []
+	for index in range(self.pixels_tree.topLevelItemCount()):
+		item = self.pixels_tree.topLevelItem(index)
+		if item.checkState(0) == 2:
+			id = int(item.text(2))
+			pixel_ids.append(id)
+			pixel = get_pixels_by_id(self,id)
+			pixel.set_checked()
+	return pixel_ids
+
+def get_pixels_by_id(self, id):
+	for item in self.pixel_list:
+		if item.id == id:
+			return item 
+	return None
 
 def refresh_pixels_tree(self):
 	self.pixels_tree.clear()
@@ -26,7 +59,10 @@ def refresh_pixels_tree(self):
 				str('{}: [{}, {}]'.format(pixel.name, pixel.ix, pixel.iy)), 
 				None,
 				str(pixel.id)])
-		R.setCheckState(0, QtCore.Qt.Checked)
+		if pixel.is_checked:
+			R.setCheckState(0, 2)
+		else:
+			R.setCheckState(0, 0)
 		R.setBackground(1,QtGui.QBrush(QtGui.QColor(pixel.color)))
 
 def verify_pixel_name(name, pixel_list):

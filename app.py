@@ -3,9 +3,13 @@ from thz import (THZImage,)
 from components.combos import (fill_interpolation_cb, fill_cmaptype_cb, change_cmap_cb,
 	fill_image_view_mode_cb,)
 from components.progress import (set_progress,)
-from models.pixel import (save_pixel,)
+from components.tools import (set_checkboxes_options,)
+from models.pixel import (save_pixel, refresh_pixels_tree, selected_pixels_tree, get_pixels_by_id)
 
 def on_load(self):
+	self.pixels_tree.clear()
+	self.pixel_list = []
+	self.pixel_num = 0
 	self.img_view.app = self
 	self.pulse_view.app = self
 	self.plots_view.app = self
@@ -17,10 +21,9 @@ def on_load(self):
 	self.plots_view.refresh(self.pulse)
 	self.time_point_checkbox.setChecked(True)
 	self.axes_checkbox.setChecked(True)
-	self.points_checkbox.setChecked(True)
-	self.pixels_tree.clear()
-	self.pixel_list = []
-	self.pixel_num = 0
+	self.point_checkbox.setChecked(True)
+	self.multiple_points_checkbox.setChecked(True)
+	self.transparent_checkbox.setChecked(True)
 
 def load_test(self):
 	self.file_path = 'D:\\THz\\Samples\\Arandano_02.csv'
@@ -58,21 +61,7 @@ def key_press_event(self, event):
 		self._refresh()
 
 def set_options(self, state):
-	if self.time_point_checkbox.isChecked():
-		self.options['time_point'] = True
-	else:
-		self.options['time_point'] = False
-
-	if self.axes_checkbox.isChecked():
-		self.options['axes'] = True
-	else:
-		self.options['axes'] = False
-
-	if self.points_checkbox.isChecked():
-		self.options['points'] = True
-	else:
-		self.options['points'] = False
-
+	set_checkboxes_options(self)
 	self._refresh()
 
 def add_pixel_to_list(self):
@@ -80,9 +69,21 @@ def add_pixel_to_list(self):
 		"Pixel","Pixel Name:", QtWidgets.QLineEdit.Normal, "")
 	if okPressed and text != '':
 		save_pixel(self, text)
+		self._refresh()
 
 def remove_pixel_to_list(self):
-	pass
+	for id in selected_pixels_tree(self):
+		pixel = get_pixels_by_id(self, id)
+		self.pixel_list.remove(pixel)
+	refresh_pixels_tree(self)
+	self._refresh()
+
+def change_color_pixel_list(self):
+	for id in selected_pixels_tree(self):
+		pixel = get_pixels_by_id(self, id)
+		pixel.change_color()
+	refresh_pixels_tree(self)
+	self._refresh()
 
 
 def set_main_definitions(self, MainWindow):
@@ -95,8 +96,12 @@ def set_main_definitions(self, MainWindow):
 	self.interpolation_cb.currentTextChanged.connect(self._imaging)
 	self.time_point_checkbox.stateChanged.connect(self._set_options)
 	self.axes_checkbox.stateChanged.connect(self._set_options)
-	self.points_checkbox.stateChanged.connect(self._set_options)
+	self.point_checkbox.stateChanged.connect(self._set_options)
+	self.multiple_points_checkbox.stateChanged.connect(self._set_options)
+	self.transparent_checkbox.stateChanged.connect(self._set_options)
 	self.add_pixel_button.clicked.connect(self._add_pixel_to_list)
+	self.remove_pixel_button.clicked.connect(self._remove_pixel_to_list)
+	self.change_color_button.clicked.connect(self._change_color_pixel_list)
 	fill_interpolation_cb(self.interpolation_cb)
 	fill_cmaptype_cb(self.cmaptype_cb)
 	fill_image_view_mode_cb(self.view_mode_cb)
@@ -109,6 +114,8 @@ def set_main_definitions(self, MainWindow):
 		'time_point': True,
 		'axes': True,
 		'points': True,
+		'multiple_points': True,
+		'transparent': True,
 	}
 
 def refresh(self):

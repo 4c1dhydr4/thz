@@ -240,7 +240,7 @@
        <rect>
         <x>220</x>
         <y>370</y>
-        <width>201</width>
+        <width>181</width>
         <height>149</height>
        </rect>
       </property>
@@ -369,10 +369,10 @@
      <widget class="QWidget" name="verticalLayoutWidget_3">
       <property name="geometry">
        <rect>
-        <x>430</x>
+        <x>410</x>
         <y>370</y>
-        <width>146</width>
-        <height>91</height>
+        <width>151</width>
+        <height>130</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -398,9 +398,23 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="points_checkbox">
+        <widget class="QCheckBox" name="point_checkbox">
          <property name="text">
-          <string>Show Selected Points</string>
+          <string>Show Actual Pixel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="multiple_points_checkbox">
+         <property name="text">
+          <string>Show Multiple Pixels</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="transparent_checkbox">
+         <property name="text">
+          <string>Transparent Points</string>
          </property>
         </widget>
        </item>
@@ -411,7 +425,7 @@
        <rect>
         <x>220</x>
         <y>530</y>
-        <width>281</width>
+        <width>340</width>
         <height>61</height>
        </rect>
       </property>
@@ -507,7 +521,7 @@
        <rect>
         <x>580</x>
         <y>350</y>
-        <width>231</width>
+        <width>241</width>
         <height>241</height>
        </rect>
       </property>
@@ -551,6 +565,13 @@
           <widget class="QPushButton" name="remove_pixel_button">
            <property name="text">
             <string>Remove</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="change_color_button">
+           <property name="text">
+            <string>Change Color</string>
            </property>
           </widget>
          </item>

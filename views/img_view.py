@@ -64,12 +64,22 @@ class ImgView(QWidget):
 		self.ax.clear()
 		self.canvas.draw()
 
+	def paint_points(self):
+		if self.app.options['points']:
+			self.ax.scatter(self.ix, self.iy, edgecolors='w', color='r', alpha=1)
+		if self.app.options['multiple_points']:
+			for point in self.app.pixel_list:
+				if self.app.options['transparent']:
+					self.ax.scatter(point.ix, point.iy, edgecolors='w', facecolors='none', alpha=1)
+				else:
+					self.ax.scatter(point.ix, point.iy, edgecolors='w', color=point.color, alpha=1)
+				self.ax.text(point.ix+1,point.iy+1, point.name,fontsize=10,color='w')
+
 	def show_img(self, img,**kwargs):
 		self.img = img
 		self.ax.clear()
 		self.ax.imshow(self.img, **kwargs)
-		if self.app.options['points']:
-			self.ax.scatter(self.ix, self.iy, edgecolors='w', color='r', alpha=0.5)
+		self.paint_points()
 		self.ax.set_axis_off()
 		self.canvas.draw()
 		self.canvas.show()
