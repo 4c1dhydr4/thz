@@ -1,5 +1,4 @@
 from PyQt5.QtWidgets import *
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.widgets import LassoSelector, Cursor
@@ -7,9 +6,6 @@ from matplotlib.widgets import LassoSelector, Cursor
 # from matplotlib.path import Path
 # from matplotlib import patches as patches
 # import random
-
-plt.rcParams["figure.figsize"] = (20,10)
-plt.rcParams["axes.grid"] = True
 
 class ImgView(QWidget):
 	
@@ -72,9 +68,11 @@ class ImgView(QWidget):
 		self.img = img
 		self.ax.clear()
 		self.ax.imshow(self.img, **kwargs)
-		self.ax.scatter(self.ix, self.iy, edgecolors='w', color='r', alpha=0.5)
+		if self.app.options['points']:
+			self.ax.scatter(self.ix, self.iy, edgecolors='w', color='r', alpha=0.5)
 		self.ax.set_axis_off()
 		self.canvas.draw()
 		self.canvas.show()
-		self.cursor = Cursor(self.canvas.axes, useblit=False, 
-			color='red', linewidth=1, linestyle='--')
+		if self.app.options['axes']:
+			self.cursor = Cursor(self.canvas.axes, useblit=False, 
+				color='red', linewidth=0.75, linestyle='--')

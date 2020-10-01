@@ -3,6 +3,7 @@ from thz import (THZImage,)
 from components.combos import (fill_interpolation_cb, fill_cmaptype_cb, change_cmap_cb,
 	fill_image_view_mode_cb,)
 from components.progress import (set_progress,)
+from models.pixel import (save_pixel,)
 
 def on_load(self):
 	self.img_view.app = self
@@ -14,6 +15,12 @@ def on_load(self):
 	self.pulse = self.thz_img.get_column_index(0,0)
 	self.pulse_view.refresh(self.pulse)
 	self.plots_view.refresh(self.pulse)
+	self.time_point_checkbox.setChecked(True)
+	self.axes_checkbox.setChecked(True)
+	self.points_checkbox.setChecked(True)
+	self.pixels_tree.clear()
+	self.pixel_list = []
+	self.pixel_num = 0
 
 def load_test(self):
 	self.file_path = 'D:\\THz\\Samples\\Arandano_02.csv'
@@ -50,14 +57,46 @@ def key_press_event(self, event):
 	if self.img_view.control_coords():
 		self._refresh()
 
+def set_options(self, state):
+	if self.time_point_checkbox.isChecked():
+		self.options['time_point'] = True
+	else:
+		self.options['time_point'] = False
+
+	if self.axes_checkbox.isChecked():
+		self.options['axes'] = True
+	else:
+		self.options['axes'] = False
+
+	if self.points_checkbox.isChecked():
+		self.options['points'] = True
+	else:
+		self.options['points'] = False
+
+	self._refresh()
+
+def add_pixel_to_list(self):
+	text, okPressed = QtWidgets.QInputDialog.getText(None, 
+		"Pixel","Pixel Name:", QtWidgets.QLineEdit.Normal, "")
+	if okPressed and text != '':
+		save_pixel(self, text)
+
+def remove_pixel_to_list(self):
+	pass
+
+
 def set_main_definitions(self, MainWindow):
 	# Setear funciones a controles de interfaz con cada objeto (botones, sliders, etc.)
 	self.first_load = True
 	self.thz_img = None
-	self.testButton.clicked.connect(self._load_test)
+	self.load_button.clicked.connect(self._load_test)
 	self.cmaptype_cb.currentTextChanged.connect(self._cmaptype)
 	self.cmap_cb.currentTextChanged.connect(self._imaging)
 	self.interpolation_cb.currentTextChanged.connect(self._imaging)
+	self.time_point_checkbox.stateChanged.connect(self._set_options)
+	self.axes_checkbox.stateChanged.connect(self._set_options)
+	self.points_checkbox.stateChanged.connect(self._set_options)
+	self.add_pixel_button.clicked.connect(self._add_pixel_to_list)
 	fill_interpolation_cb(self.interpolation_cb)
 	fill_cmaptype_cb(self.cmaptype_cb)
 	fill_image_view_mode_cb(self.view_mode_cb)
@@ -66,6 +105,11 @@ def set_main_definitions(self, MainWindow):
 	self.sample_info_text.setReadOnly(True)
 	MainWindow.keyPressEvent = self._key_press_event
 	self.first_load = False
+	self.options = {
+		'time_point': True,
+		'axes': True,
+		'points': True,
+	}
 
 def refresh(self):
 	self.img_view.refresh()

@@ -1,24 +1,18 @@
 from PyQt5.QtWidgets import *
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.widgets import Cursor
-# from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-# from matplotlib.path import Path
-# from matplotlib import patches as patches
-
-plt.rcParams["figure.figsize"] = (20,10)
 
 class PulseView(QWidget):
 	
 	def __init__(self, parent = None):
 
 		QWidget.__init__(self, parent)
-		self.fig = Figure(frameon=False)
+		self.fig = Figure(frameon=False, dpi=80, figsize=(20, 10))
 		self.canvas = FigureCanvas(self.fig)
 		vertical_layout = QVBoxLayout()
 		vertical_layout.addWidget(self.canvas)
-		self.canvas.axes = self.fig.add_axes([0.11,0.15,0.90,0.80])
+		self.canvas.axes = self.fig.add_axes([0.11,0.15,0.88,0.80])
 		self.ax = self.canvas.axes
 		self.ax.grid(True)
 		self.setLayout(vertical_layout)
@@ -40,10 +34,11 @@ class PulseView(QWidget):
 		self.set_app_values()
 
 	def onclick(self,event):
-		ix = int(event.xdata)
-		if ix >= 0 and ix <= self.max_row:
-			self.row = ix
-			self.refresh(self.app.pulse)
+		ix = int(event.xdata) if event.xdata is not None else None
+		if ix is not None:
+			if ix >= 0 and ix <= self.max_row:
+				self.row = ix
+				self.refresh(self.app.pulse)
 
 	def onmove(self, event):
 		if not event.inaxes:
@@ -78,22 +73,23 @@ class PulseView(QWidget):
 		self.cursor.horizOn = False
 
 	def plot(self, data, **kwargs):
-		x_points = (self.row, self.row)
-		y_points = (min(data), max(data))
 		self.ax.clear()
 		self.ax.plot(data, 
 			color='green', linewidth=0.5, markersize=12, **kwargs)
-		self.ax.plot(
-			x_points,
-			y_points, 
-			'r--', lw=.5)
-		self.ax.text(
-			x_points[0], 
-			y_points[1]/2.5, 'Time Point',
-			fontsize=6,
-			color='red',
-			rotation='vertical',
-			rotation_mode='anchor')
+		if self.app.options['time_point']:
+			x_points = (self.row, self.row)
+			y_points = (min(data), max(data))
+			self.ax.plot(
+				x_points,
+				y_points, 
+				'r--', lw=.5)
+			self.ax.text(
+				x_points[0], 
+				y_points[1]/2.5, 'Time Point',
+				fontsize=6,
+				color='red',
+				rotation='vertical',
+				rotation_mode='anchor')
 		self.ax.set_xlabel('Optical Delay (ps)')
 		self.ax.set_ylabel('Terahertz Signal')
 		self.set_cursor()
