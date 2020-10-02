@@ -16,18 +16,16 @@ def on_load(self):
 	self.pulse_view.onload()
 	self.plots_view.onload()
 	self.sample_info_text.setPlainText(self.thz_img.get_image_details())
-	self.pulse = self.thz_img.get_column_index(0,0)
+	self.img_view.set_coords((int(self.thz_img.columns/2),int(self.thz_img.rows/2)))
+	self.pulse = self.thz_img.get_column_index(*self.img_view.get_coords())
 	self.pulse_view.refresh(self.pulse)
 	self.plots_view.refresh(self.pulse)
-	# self.time_point_checkbox.setChecked(True)
-	# self.axes_checkbox.setChecked(True)
-	# self.point_checkbox.setChecked(True)
-	# self.multiple_points_checkbox.setChecked(True)
-	# self.transparent_checkbox.setChecked(True)
+	self.img_view.set_app_values()
+
 
 def load_test(self):
-	self.file_path = 'D:\\THz\\Samples\\3.csv'
-	# self.file_path = 'D:\\THz\\Samples\\arandano_01.csv'
+	# self.file_path = 'D:\\THz\\Samples\\3.csv'
+	self.file_path = 'D:\\THz\\Samples\\arandano_01.csv'
 	self.progress = set_progress('Loading THz Image')
 	self.thz_img = THZImage(self.file_path, self.progress)
 	self.progress.close()
@@ -93,6 +91,13 @@ def set_main_definitions(self, MainWindow):
 	# Setear funciones a controles de interfaz con cada objeto (botones, sliders, etc.)
 	self.first_load = True
 	self.thz_img = None
+
+	self.time_point_checkbox.setChecked(True)
+	self.axes_checkbox.setChecked(True)
+	self.point_checkbox.setChecked(True)
+	self.multiple_points_checkbox.setChecked(True)
+	self.transparent_checkbox.setChecked(True)
+
 	self.load_button.clicked.connect(self._load_test)
 	self.cmaptype_cb.currentTextChanged.connect(self._cmaptype)
 	self.cmap_cb.currentTextChanged.connect(self._imaging)
@@ -106,6 +111,7 @@ def set_main_definitions(self, MainWindow):
 	self.remove_pixel_button.clicked.connect(self._remove_pixel_to_list)
 	self.change_color_button.clicked.connect(self._change_color_pixel_list)
 	self.plot_pixels_button.clicked.connect(self._plot_pixels)
+
 	fill_interpolation_cb(self.interpolation_cb)
 	fill_cmaptype_cb(self.cmaptype_cb)
 	fill_image_view_mode_cb(self.view_mode_cb)

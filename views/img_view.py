@@ -57,6 +57,12 @@ class ImgView(QWidget):
 		else:
 			return True
 
+	def set_coords(self, coords):
+		self.ix, self.iy = coords
+
+	def get_coords(self):
+		return (self.ix, self.iy)
+
 	def set_app_values(self):
 		self.app.index_label.setText('Pixel Index: [{},{}]'.format(self.ix, self.iy))
 
@@ -76,7 +82,6 @@ class ImgView(QWidget):
 				self.ax.text(point.ix+1,point.iy+1, point.name,fontsize=10,color='w')
 
 	def show_img(self, img,**kwargs):
-		print('imaging')
 		self.img = img
 		self.ax.clear()
 		self.ax.imshow(self.img, **kwargs)
