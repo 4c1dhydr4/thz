@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.widgets import Cursor
+from models.pixel import (get_pixels_by_id,)
 
 class PulseView(QWidget):
 	
@@ -12,9 +13,8 @@ class PulseView(QWidget):
 		self.canvas = FigureCanvas(self.fig)
 		vertical_layout = QVBoxLayout()
 		vertical_layout.addWidget(self.canvas)
-		self.canvas.axes = self.fig.add_axes([0.11,0.15,0.88,0.80])
+		self.canvas.axes = self.fig.add_axes([0.08,0.1,0.91,0.90])
 		self.ax = self.canvas.axes
-		self.ax.grid(True)
 		self.setLayout(vertical_layout)
 		self.ax.clear()
 		self.ax.set_xlabel('Optical Delay (ps)')
@@ -72,17 +72,11 @@ class PulseView(QWidget):
 			useblit=False, color='blue', linewidth=.5, linestyle='--')
 		self.cursor.horizOn = False
 
-	def plot(self, data, **kwargs):
-		self.ax.clear()
-		self.ax.plot(data, 
-			color='green', linewidth=0.5, markersize=12, **kwargs)
+	def plot_time_point(self, data):
 		if self.app.options['time_point']:
 			x_points = (self.row, self.row)
 			y_points = (min(data), max(data))
-			self.ax.plot(
-				x_points,
-				y_points, 
-				'r--', lw=.5)
+			self.ax.plot(x_points, y_points,'r--', lw=.5)
 			self.ax.text(
 				x_points[0], 
 				y_points[1]/2.5, 'Time Point',
@@ -90,7 +84,29 @@ class PulseView(QWidget):
 				color='red',
 				rotation='vertical',
 				rotation_mode='anchor')
+
+	def plot(self, data, **kwargs):
+		self.ax.clear()
+		self.ax.grid(True)
+		self.ax.plot(data, 
+			color='green', linewidth=0.5, markersize=12, **kwargs)
+		self.plot_time_point(data)
 		self.ax.set_xlabel('Optical Delay (ps)')
 		self.ax.set_ylabel('Terahertz Signal')
 		self.set_cursor()
 		self.draw()
+
+	def plot_pixels(self, app, ids):
+		self.ax.clear()
+		self.ax.grid(True)
+		for id in ids:
+			px = get_pixels_by_id(app, id)
+			self.ax.plot(px.pulse,color=px.color, 
+				linewidth=0.8, markersize=12, label=px.name)
+		# self.plot_time_point()
+		self.ax.legend()
+		self.ax.set_xlabel('Optical Delay (ps)')
+		self.ax.set_ylabel('Terahertz Signal')
+		self.set_cursor()
+		self.draw()
+

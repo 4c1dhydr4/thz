@@ -83,8 +83,10 @@ def change_color_pixel_list(self):
 		pixel = get_pixels_by_id(self, id)
 		pixel.change_color()
 	refresh_pixels_tree(self)
-	self._refresh()
+	# self._refresh()
 
+def plot_pixels(self):
+	self.pulse_view.plot_pixels(self, selected_pixels_tree(self))
 
 def set_main_definitions(self, MainWindow):
 	# Setear funciones a controles de interfaz con cada objeto (botones, sliders, etc.)
@@ -102,6 +104,7 @@ def set_main_definitions(self, MainWindow):
 	self.add_pixel_button.clicked.connect(self._add_pixel_to_list)
 	self.remove_pixel_button.clicked.connect(self._remove_pixel_to_list)
 	self.change_color_button.clicked.connect(self._change_color_pixel_list)
+	self.plot_pixels_button.clicked.connect(self._plot_pixels)
 	fill_interpolation_cb(self.interpolation_cb)
 	fill_cmaptype_cb(self.cmaptype_cb)
 	fill_image_view_mode_cb(self.view_mode_cb)

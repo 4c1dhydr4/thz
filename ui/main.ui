@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1345</width>
-    <height>680</height>
+    <width>1350</width>
+    <height>690</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>-1</x>
       <y>0</y>
       <width>511</width>
-      <height>641</height>
+      <height>611</height>
      </rect>
     </property>
    </widget>
@@ -519,9 +519,9 @@
      <widget class="QWidget" name="verticalLayoutWidget_5">
       <property name="geometry">
        <rect>
-        <x>580</x>
+        <x>570</x>
         <y>350</y>
-        <width>241</width>
+        <width>251</width>
         <height>241</height>
        </rect>
       </property>
@@ -577,6 +577,17 @@
          </item>
         </layout>
        </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QPushButton" name="plot_pixels_button">
+           <property name="text">
+            <string>Plot Pixels</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -590,11 +601,86 @@
         <x>0</x>
         <y>0</y>
         <width>821</width>
-        <height>401</height>
+        <height>481</height>
        </rect>
       </property>
      </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_6">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>490</y>
+        <width>251</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Plots Tools:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <widget class="QPushButton" name="export_plots_button">
+           <property name="text">
+            <string>Export Plots</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_7">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>490</y>
+        <width>101</width>
+        <height>80</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Plots Options:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="grid_checkbox">
+         <property name="text">
+          <string>Show Grid</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_7">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>610</y>
+      <width>160</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_9">
+     <item>
+      <widget class="QPushButton" name="zoom_button">
+       <property name="text">
+        <string>Zoom</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -602,7 +688,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1345</width>
+     <width>1350</width>
      <height>21</height>
     </rect>
    </property>
