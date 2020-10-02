@@ -62,7 +62,7 @@ class PlotsView(QWidget):
 
 	def plot_abs(self):
 		self.ax4.clear()
-		self.ax4.plot(self.pulse, 
+		self.ax4.semilogy(self.pulse, 
 			color='blue', linewidth=0.5, markersize=12)
 		self.ax4.set_xlabel('Frequency (THz)')
 		self.ax4.set_ylabel('Absorvance')

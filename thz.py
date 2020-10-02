@@ -48,15 +48,19 @@ class THZImage():
 				elif line == 6:
 					self.y_max = float(row[1])
 				elif line == 8:
-					self.pixels = np.array([int(x) for x in row[1::]])
+					self.pixels = np.array(list(map(int, row[1::])))
 				elif line == 9:
-					self.y_pixels = np.array([int(x) for x in row[1::]])
+					self.y_pixels = np.array(list(map(int, row[1::])))
 				elif line == 10:
-					self.x_pixels = np.array([int(x) for x in row[1::]])
+					self.x_pixels = np.array(list(map(int, row[1::])))
 				elif line == 11:
 					pass
 				else:
-					lrow = np.array([float(d) for d in row[1::] if d != ''])
+					try:
+						lrow = np.array(list(map(float, row[1::])))
+					except:
+						lrow = []
+					# lrow = np.array([float(d) for d in row[1::] if d != ''])
 					if len(lrow) != 0:
 						self.reference.append(float(row[0]))
 						self.dataset.append(lrow)
@@ -76,7 +80,7 @@ class THZImage():
 		return self.dataset[:, column]
 
 	def get_column_index(self, x, y):
-		for index in range(0,self.n_waveforms):
+		for index in range(0, self.n_pixels):
 			if x==self.x_pixels[index] and y==self.y_pixels[index]:
 				return self.get_column(index)
 

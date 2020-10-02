@@ -19,14 +19,15 @@ def on_load(self):
 	self.pulse = self.thz_img.get_column_index(0,0)
 	self.pulse_view.refresh(self.pulse)
 	self.plots_view.refresh(self.pulse)
-	self.time_point_checkbox.setChecked(True)
-	self.axes_checkbox.setChecked(True)
-	self.point_checkbox.setChecked(True)
-	self.multiple_points_checkbox.setChecked(True)
-	self.transparent_checkbox.setChecked(True)
+	# self.time_point_checkbox.setChecked(True)
+	# self.axes_checkbox.setChecked(True)
+	# self.point_checkbox.setChecked(True)
+	# self.multiple_points_checkbox.setChecked(True)
+	# self.transparent_checkbox.setChecked(True)
 
 def load_test(self):
-	self.file_path = 'D:\\THz\\Samples\\Arandano_02.csv'
+	self.file_path = 'D:\\THz\\Samples\\3.csv'
+	# self.file_path = 'D:\\THz\\Samples\\arandano_01.csv'
 	self.progress = set_progress('Loading THz Image')
 	self.thz_img = THZImage(self.file_path, self.progress)
 	self.progress.close()
@@ -83,7 +84,7 @@ def change_color_pixel_list(self):
 		pixel = get_pixels_by_id(self, id)
 		pixel.change_color()
 	refresh_pixels_tree(self)
-	# self._refresh()
+	self._refresh()
 
 def plot_pixels(self):
 	self.pulse_view.plot_pixels(self, selected_pixels_tree(self))
@@ -112,7 +113,6 @@ def set_main_definitions(self, MainWindow):
 	self.index_label.setText('Pixel Index: [0,0]')
 	self.sample_info_text.setReadOnly(True)
 	MainWindow.keyPressEvent = self._key_press_event
-	self.first_load = False
 	self.options = {
 		'time_point': True,
 		'axes': True,
@@ -120,6 +120,7 @@ def set_main_definitions(self, MainWindow):
 		'multiple_points': True,
 		'transparent': True,
 	}
+	self.first_load = False
 
 def refresh(self):
 	self.img_view.refresh()
