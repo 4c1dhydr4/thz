@@ -274,7 +274,8 @@ class Ui_MainWindow(App):
         self.retranslateUi(MainWindow)
         self.tab.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-        App.set_main_definitions(self,MainWindow)
+
+        self._set_main_definitions(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -314,6 +315,3 @@ class Ui_MainWindow(App):
         self.grid_checkbox.setText(_translate("MainWindow", "Show Grid"))
         self.tab.setTabText(self.tab.indexOf(self.tab_2), _translate("MainWindow", "Plots"))
         self.zoom_button.setText(_translate("MainWindow", "Zoom"))
-from imgview import ImgView
-from plotsview import PlotsView
-from pulseview import PulseView
