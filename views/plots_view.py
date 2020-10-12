@@ -38,6 +38,8 @@ class PlotsView(QWidget):
 
 	def plot_pulse(self):
 		self.ax1.clear()
+		if self.app.options['grid']:
+			self.ax1.grid(True)
 		self.ax1.plot(self.pulse, 
 			color='red', linewidth=0.5, markersize=12)
 		self.ax1.set_xlabel('Optical Delay (ps)')
@@ -47,6 +49,8 @@ class PlotsView(QWidget):
 		self.fft = np.abs(np.fft.fft(self.pulse))[0:400]
 		self.f = np.linspace(0,4,self.fft.shape[0])
 		self.ax2.clear()
+		if self.app.options['grid']:
+			self.ax2.grid(True)
 		self.ax2.semilogy(self.f, self.fft, 
 			color='black', linewidth=0.5, markersize=12)
 		self.ax2.set_xlabel('Frequency (THz)')
@@ -55,6 +59,8 @@ class PlotsView(QWidget):
 	def plot_trans(self):
 		self.T = self.pulse[0:400]/self.fft
 		self.ax3.clear()
+		if self.app.options['grid']:
+			self.ax3.grid(True)
 		self.ax3.semilogy(self.T,
 			color='green', linewidth=0.5, markersize=12)
 		self.ax3.set_xlabel('Frequency (THz)')
@@ -62,6 +68,8 @@ class PlotsView(QWidget):
 
 	def plot_abs(self):
 		self.ax4.clear()
+		if self.app.options['grid']:
+			self.ax4.grid(True)
 		self.ax4.semilogy(self.pulse, 
 			color='blue', linewidth=0.5, markersize=12)
 		self.ax4.set_xlabel('Frequency (THz)')

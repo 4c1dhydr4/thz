@@ -28,7 +28,9 @@ class PulseView(QWidget):
 	def onload(self):
 		self.max_row = self.app.thz_img.dataset.shape[0]-1
 
-	def refresh(self, data):
+	def refresh(self, data, onload=False):
+		if onload:
+			self.row = int(len(data)/2)
 		self.plot(data)
 		self.app._imaging()
 		self.set_app_values()

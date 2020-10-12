@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QMessageBox, QTreeWidgetItem
 from components.tools import (show_message, get_rand_color)
+from thz import (Pulse,)
 
 class Pixel():
 	id = 0
@@ -18,6 +19,7 @@ class Pixel():
 		self.pulse = thz_img.get_column_index(ix, iy)
 		self.id = id
 		self.is_checked = True
+		self.thz_pulse = Pulse(self.pulse)
 
 	def change_color(self):
 		self.color = get_rand_color()

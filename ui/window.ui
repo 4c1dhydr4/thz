@@ -52,7 +52,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_1">
      <attribute name="title">
@@ -372,7 +372,7 @@
         <x>410</x>
         <y>370</y>
         <width>151</width>
-        <height>130</height>
+        <height>153</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -415,6 +415,13 @@
         <widget class="QCheckBox" name="transparent_checkbox">
          <property name="text">
           <string>Transparent Points</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="grid_checkbox">
+         <property name="text">
+          <string>Show Grid</string>
          </property>
         </widget>
        </item>
@@ -582,13 +589,121 @@
          <item>
           <widget class="QPushButton" name="plot_pixels_button">
            <property name="text">
-            <string>Plot Pixels</string>
+            <string>Analyze Pixels</string>
            </property>
           </widget>
          </item>
         </layout>
        </item>
       </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Pulse</string>
+     </attribute>
+     <widget class="PulsePlot" name="pulse_plot" native="true">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>831</width>
+        <height>421</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_8">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>430</y>
+        <width>91</width>
+        <height>92</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_8">
+       <item>
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>Time Starts:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="time_start_line">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>Time Ends:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="time_end_line">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_9">
+      <property name="geometry">
+       <rect>
+        <x>110</x>
+        <y>430</y>
+        <width>160</width>
+        <height>84</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_9">
+       <item>
+        <widget class="QLabel" name="label_14">
+         <property name="text">
+          <string>Plot Options:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="pp_reference_checkbox">
+         <property name="text">
+          <string>Show Reference Pulse</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="pp_legend_checkbox">
+         <property name="text">
+          <string>Show Legend</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="pp_grid_checkbox">
+         <property name="text">
+          <string>Show Grid</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QPushButton" name="pp_reload_button">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>540</y>
+        <width>151</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Apply Changes</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
@@ -641,7 +756,7 @@
         <x>290</x>
         <y>490</y>
         <width>101</width>
-        <height>80</height>
+        <height>61</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -649,13 +764,6 @@
         <widget class="QLabel" name="label_11">
          <property name="text">
           <string>Plots Options:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="grid_checkbox">
-         <property name="text">
-          <string>Show Grid</string>
          </property>
         </widget>
        </item>
@@ -712,6 +820,12 @@
    <class>PlotsView</class>
    <extends>QWidget</extends>
    <header location="global">plotsview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PulsePlot</class>
+   <extends>QWidget</extends>
+   <header location="global">pulseplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

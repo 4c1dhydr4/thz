@@ -2,7 +2,7 @@ import csv
 import numpy as np
 
 class THZImage():
-	dataset = []
+	dataset = [] #Numpy mxn
 	file_path = ''
 	filename = ''
 	rows = 0.0
@@ -98,3 +98,14 @@ class THZImage():
 		txt += 'Y Range:\n -Min: {}\n -Max:{}\n'.format(self.y_min, self.y_max)
 		txt += 'File Path:\n {}\n'.format(self.file_path)
 		return txt
+
+
+class Pulse():
+	data = None #Numpy mx1
+	time_vector = None
+
+	def __init__(self, data):
+		self.data = data
+
+	def set_time_vector(self, time_0, time_n):
+		self.time_vector = np.linspace(time_0, time_n, data.shape[0])

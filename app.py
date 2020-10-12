@@ -1,10 +1,10 @@
 from PyQt5 import (QtCore, QtGui, QtWidgets,)
-from thz import (THZImage,)
+from thz import (THZImage,Pulse,)
 from components.combos import (fill_interpolation_cb, fill_cmaptype_cb, change_cmap_cb,
 	fill_image_view_mode_cb,)
 from components.progress import (set_progress,)
-from components.tools import (set_checkboxes_options,)
 from models.pixel import (save_pixel, refresh_pixels_tree, selected_pixels_tree, get_pixels_by_id)
+from components.options import (set_checkboxes_options, set_pulse_plot_options,)
 
 class App(object):
 
@@ -61,7 +61,7 @@ class App(object):
 	def _remove_pixel_to_list(self):
 		for id in selected_pixels_tree(self):
 			pixel = get_pixels_by_id(self, id)
-			pixel.change_color()
+			self.pixel_list.remove(pixel)
 		refresh_pixels_tree(self)
 		self._refresh()
 
@@ -73,28 +73,48 @@ class App(object):
 		# self._refresh()
 
 	def _plot_pixels(self):
-		self.pulse_view.plot_pixels(self, selected_pixels_tree(self))
+		pixels = selected_pixels_tree(self)
+		self.pulse_view.plot_pixels(self, pixels)
+		self.pulse_plot.plot_pulses(pixels)
+
+	def _pp_apply_changes(self):
+		set_pulse_plot_options(self)
+		self.pulse_plot.plot_pulses(selected_pixels_tree(self))
 
 	def _set_main_definitions(self, MainWindow):
 		# Setear funciones a controles de interfaz con cada objeto (botones, sliders, etc.)
 		self.first_load = True
 		self.thz_img = None
 
+		self.tab.setCurrentIndex(0)
+
 		self.time_point_checkbox.setChecked(True)
 		self.axes_checkbox.setChecked(True)
 		self.point_checkbox.setChecked(True)
 		self.multiple_points_checkbox.setChecked(True)
 		self.transparent_checkbox.setChecked(True)
+		self.grid_checkbox.setChecked(True)
 
+		# Pulse Plot Tab
+		self.time_start_line.setValidator(QtGui.QDoubleValidator(-30,30,3))
+		self.time_end_line.setValidator(QtGui.QDoubleValidator(-30,30,3))
+		self.pp_grid_checkbox.setChecked(True)
+		self.pp_legend_checkbox.setChecked(True)
+		self.pp_reload_button.clicked.connect(self._pp_apply_changes)
+		
 		self.load_button.clicked.connect(self._load_test)
 		self.cmaptype_cb.currentTextChanged.connect(self._cmaptype)
 		self.cmap_cb.currentTextChanged.connect(self._imaging)
 		self.interpolation_cb.currentTextChanged.connect(self._imaging)
+
+		# Image Options
 		self.time_point_checkbox.stateChanged.connect(self._set_options)
 		self.axes_checkbox.stateChanged.connect(self._set_options)
 		self.point_checkbox.stateChanged.connect(self._set_options)
 		self.multiple_points_checkbox.stateChanged.connect(self._set_options)
 		self.transparent_checkbox.stateChanged.connect(self._set_options)
+		self.grid_checkbox.stateChanged.connect(self._set_options)
+		
 		self.add_pixel_button.clicked.connect(self._add_pixel_to_list)
 		self.remove_pixel_button.clicked.connect(self._remove_pixel_to_list)
 		self.change_color_button.clicked.connect(self._change_color_pixel_list)
@@ -103,16 +123,25 @@ class App(object):
 		fill_interpolation_cb(self.interpolation_cb)
 		fill_cmaptype_cb(self.cmaptype_cb)
 		fill_image_view_mode_cb(self.view_mode_cb)
+
 		self.waveform_point_label.setText('Time Point: 0')
 		self.index_label.setText('Pixel Index: [0,0]')
 		self.sample_info_text.setReadOnly(True)
+
 		MainWindow.keyPressEvent = self._key_press_event
+
 		self.options = {
 			'time_point': True,
 			'axes': True,
 			'points': True,
 			'multiple_points': True,
 			'transparent': True,
+			'grid': True,
+		}
+		self.pp_options = {
+			'grid':True,
+			'legend':True,
+			'reference':False,
 		}
 		self.first_load = False
 
@@ -123,11 +152,12 @@ class App(object):
 		self.img_view.app = self
 		self.pulse_view.app = self
 		self.plots_view.app = self
+		self.pulse_plot.app = self
 		self.pulse_view.onload()
 		self.plots_view.onload()
 		self.sample_info_text.setPlainText(self.thz_img.get_image_details())
 		self.img_view.set_coords((int(self.thz_img.columns/2),int(self.thz_img.rows/2)))
 		self.pulse = self.thz_img.get_column_index(*self.img_view.get_coords())
-		self.pulse_view.refresh(self.pulse)
+		self.pulse_view.refresh(self.pulse, onload=True)
 		self.plots_view.refresh(self.pulse)
 		self.img_view.set_app_values()
