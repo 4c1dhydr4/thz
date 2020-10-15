@@ -4,6 +4,7 @@ from views.img_view import ImgView
 from views.pulse_view import PulseView
 from views.plots_view import PlotsView
 from views.pulse_plot import PulsePlot
+from views.frequency_plot import FrequencyPlot
 from app import App
 
 class Ui_MainWindow(App):
@@ -271,6 +272,12 @@ class Ui_MainWindow(App):
         self.pp_reload_button.setGeometry(QtCore.QRect(10, 540, 151, 23))
         self.pp_reload_button.setObjectName("pp_reload_button")
         self.tab.addTab(self.tab_3, "")
+        self.tab_4 = QtWidgets.QWidget()
+        self.tab_4.setObjectName("tab_4")
+        self.frequency_plot = FrequencyPlot(self.tab_4)
+        self.frequency_plot.setGeometry(QtCore.QRect(0, 0, 831, 421))
+        self.frequency_plot.setObjectName("frequency_plot")
+        self.tab.addTab(self.tab_4, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
         self.plots_view = PlotsView(self.tab_2)
@@ -320,7 +327,7 @@ class Ui_MainWindow(App):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.tab.setCurrentIndex(1)
+        self.tab.setCurrentIndex(2)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -364,6 +371,7 @@ class Ui_MainWindow(App):
         self.pp_grid_checkbox.setText(_translate("MainWindow", "Show Grid"))
         self.pp_reload_button.setText(_translate("MainWindow", "Apply Changes"))
         self.tab.setTabText(self.tab.indexOf(self.tab_3), _translate("MainWindow", "Pulse"))
+        self.tab.setTabText(self.tab.indexOf(self.tab_4), _translate("MainWindow", "Frequency Domain"))
         self.label_10.setText(_translate("MainWindow", "Plots Tools:"))
         self.export_plots_button.setText(_translate("MainWindow", "Export Plots"))
         self.label_11.setText(_translate("MainWindow", "Plots Options:"))

@@ -35,6 +35,7 @@ class PlotsView(QWidget):
 		self.plot_trans()
 		self.plot_abs()
 		self.canvas.draw()
+		self.canvas.flush_events()
 
 	def plot_pulse(self):
 		self.ax1.clear()

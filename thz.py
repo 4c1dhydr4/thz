@@ -106,6 +106,10 @@ class Pulse():
 
 	def __init__(self, data):
 		self.data = data
+		self.fft = np.abs(np.fft.fft(self.data))
 
 	def set_time_vector(self, time_0, time_n):
 		self.time_vector = np.linspace(time_0, time_n, data.shape[0])
+
+	def get_frequency_domain(self, n):
+		return self.fft[0:n], np.linspace(0,8,n)

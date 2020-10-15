@@ -38,7 +38,8 @@ class ImgView(QWidget):
 			self.app.pulse_view.set_app_values()
 			self.app._imaging()
 			self.app.plots_view.refresh(self.app.pulse)
-			self.canvas.draw()
+			# self.canvas.draw()
+			# self.canvas.flush_events()
 			self.set_app_values()
 
 	def control_coords(self):
@@ -66,10 +67,6 @@ class ImgView(QWidget):
 	def set_app_values(self):
 		self.app.index_label.setText('Pixel Index: [{},{}]'.format(self.ix, self.iy))
 
-	def clear_axes(self):
-		self.ax.clear()
-		self.canvas.draw()
-
 	def paint_points(self):
 		if self.app.options['points']:
 			self.ax.scatter(self.ix, self.iy, edgecolors='w', color='r', alpha=1)
@@ -88,7 +85,7 @@ class ImgView(QWidget):
 		self.paint_points()
 		self.ax.set_axis_off()
 		self.canvas.draw()
-		self.canvas.show()
+		self.canvas.flush_events()
 		if self.app.options['axes']:
 			self.cursor = Cursor(self.canvas.axes, useblit=False, 
 				color='red', linewidth=0.75, linestyle='--')

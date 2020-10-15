@@ -3,24 +3,15 @@ from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.widgets import Cursor
 from models.pixel import (get_pixels_by_id,)
+from models.plot import (Plot,)
 
-class PulseView(QWidget):
+class PulseView(Plot):
 	
 	def __init__(self, parent = None):
-
-		QWidget.__init__(self, parent)
-		self.fig = Figure(frameon=False, dpi=80, figsize=(20, 10))
-		self.canvas = FigureCanvas(self.fig)
-		vertical_layout = QVBoxLayout()
-		vertical_layout.addWidget(self.canvas)
-		self.canvas.axes = self.fig.add_axes([0.08,0.1,0.91,0.90])
-		self.ax = self.canvas.axes
-		self.setLayout(vertical_layout)
-		self.ax.clear()
-		self.ax.set_xlabel('Optical Delay (ps)')
+		Plot.__init__(self, parent, toolbar=False)
+		self.ax.set_xlabel('Waveform')
 		self.ax.set_ylabel('Terahertz Signal')
 		self.row = 0
-		self.canvas.draw()
 		self.canvas.mpl_connect('button_press_event', self.onclick)
 		self.canvas.mpl_connect('motion_notify_event', self.onmove)
 		self.canvas.mpl_connect('scroll_event', self.onscroll)
@@ -63,11 +54,7 @@ class PulseView(QWidget):
 
 	def set_app_values(self):
 		self.app.waveform_point_label.setText('Time Point: {}'.format(self.row))
-		self.app.signal_label.setText('Signal Value: {}'.format(self.app.pulse[self.row]))		
-
-	def draw(self):
-		self.canvas.draw()
-		self.canvas.show()
+		self.app.signal_label.setText('Signal Value: {}'.format(self.app.pulse[self.row]))
 
 	def set_cursor(self):
 		self.cursor = Cursor(self.ax, 
@@ -91,24 +78,9 @@ class PulseView(QWidget):
 		self.ax.clear()
 		self.ax.grid(True)
 		self.ax.plot(data, 
-			color='green', linewidth=0.5, markersize=12, **kwargs)
+			color='black', linewidth=0.5, **kwargs)
 		self.plot_time_point(data)
-		self.ax.set_xlabel('Optical Delay (ps)')
+		self.ax.set_xlabel('Waveform')
 		self.ax.set_ylabel('Terahertz Signal')
 		self.set_cursor()
 		self.draw()
-
-	def plot_pixels(self, app, ids):
-		self.ax.clear()
-		self.ax.grid(True)
-		for id in ids:
-			px = get_pixels_by_id(app, id)
-			self.ax.plot(px.pulse,color=px.color, 
-				linewidth=0.8, markersize=12, label=px.name)
-		# self.plot_time_point()
-		self.ax.legend()
-		self.ax.set_xlabel('Optical Delay (ps)')
-		self.ax.set_ylabel('Terahertz Signal')
-		self.set_cursor()
-		self.draw()
-

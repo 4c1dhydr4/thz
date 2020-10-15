@@ -3,6 +3,7 @@ from thz import (THZImage,Pulse,)
 from components.combos import (fill_interpolation_cb, fill_cmaptype_cb, change_cmap_cb,
 	fill_image_view_mode_cb,)
 from components.progress import (set_progress,)
+from components.tools import (show_message,)
 from models.pixel import (save_pixel, refresh_pixels_tree, selected_pixels_tree, get_pixels_by_id)
 from components.options import (set_checkboxes_options, set_pulse_plot_options,)
 
@@ -74,8 +75,11 @@ class App(object):
 
 	def _plot_pixels(self):
 		pixels = selected_pixels_tree(self)
-		self.pulse_view.plot_pixels(self, pixels)
 		self.pulse_plot.plot_pulses(pixels)
+		self.frequency_plot.plot_pulses(pixels)
+		show_message('info', 
+			'Pixel Analyze', 
+			'Pixels loaded successful', 'Go to Analyze Tabs')
 
 	def _pp_apply_changes(self):
 		set_pulse_plot_options(self)
@@ -143,6 +147,11 @@ class App(object):
 			'legend':True,
 			'reference':False,
 		}
+		self.fq_options = {
+			'grid':True,
+			'legend':True,
+			'reference':False,
+		}
 		self.first_load = False
 
 	def on_load(self):
@@ -153,6 +162,7 @@ class App(object):
 		self.pulse_view.app = self
 		self.plots_view.app = self
 		self.pulse_plot.app = self
+		self.frequency_plot.app = self
 		self.pulse_view.onload()
 		self.plots_view.onload()
 		self.sample_info_text.setPlainText(self.thz_img.get_image_details())

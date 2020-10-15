@@ -46,7 +46,7 @@
     <property name="geometry">
      <rect>
       <x>510</x>
-      <y>20</y>
+      <y>30</y>
       <width>831</width>
       <height>621</height>
      </rect>
@@ -706,6 +706,21 @@
       </property>
      </widget>
     </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Frequency Domain</string>
+     </attribute>
+     <widget class="FrequencyPlot" name="frequency_plot" native="true">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>831</width>
+        <height>421</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
       <string>Plots</string>
@@ -807,25 +822,31 @@
   <customwidget>
    <class>ImgView</class>
    <extends>QWidget</extends>
-   <header location="global">imgview.h</header>
+   <header>imgview.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>PulseView</class>
    <extends>QWidget</extends>
-   <header location="global">pulseview.h</header>
+   <header>pulseview.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>PlotsView</class>
    <extends>QWidget</extends>
-   <header location="global">plotsview.h</header>
+   <header>plotsview.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>PulsePlot</class>
    <extends>QWidget</extends>
-   <header location="global">pulseplot.h</header>
+   <header>pulseplot.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FrequencyPlot</class>
+   <extends>QWidget</extends>
+   <header>frequencyplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
