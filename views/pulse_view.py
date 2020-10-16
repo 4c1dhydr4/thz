@@ -6,7 +6,6 @@ from models.pixel import (get_pixels_by_id,)
 from models.plot import (Plot,)
 
 class PulseView(Plot):
-	
 	def __init__(self, parent = None):
 		Plot.__init__(self, parent, toolbar=False)
 		self.ax.set_xlabel('Waveform')
@@ -18,6 +17,11 @@ class PulseView(Plot):
 
 	def onload(self):
 		self.max_row = self.app.thz_img.dataset.shape[0]-1
+
+	def set_time_point_by_row(self, row, data):
+		self.row = row
+		self.plot_time_point(data, text=False)
+		self.draw()
 
 	def refresh(self, data, onload=False):
 		if onload:
@@ -61,18 +65,19 @@ class PulseView(Plot):
 			useblit=False, color='blue', linewidth=.5, linestyle='--')
 		self.cursor.horizOn = False
 
-	def plot_time_point(self, data):
+	def plot_time_point(self, data, text=True):
 		if self.app.options['time_point']:
 			x_points = (self.row, self.row)
 			y_points = (min(data), max(data))
 			self.ax.plot(x_points, y_points,'r--', lw=.5)
-			self.ax.text(
-				x_points[0], 
-				y_points[1]/2.5, 'Time Point',
-				fontsize=6,
-				color='red',
-				rotation='vertical',
-				rotation_mode='anchor')
+			if text:
+				self.ax.text(
+					x_points[0], 
+					y_points[1]/2.5, 'Time Point',
+					fontsize=6,
+					color='red',
+					rotation='vertical',
+					rotation_mode='anchor')
 
 	def plot(self, data, **kwargs):
 		self.ax.clear()

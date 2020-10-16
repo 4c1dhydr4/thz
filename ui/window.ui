@@ -52,7 +52,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_1">
      <attribute name="title">
@@ -506,6 +506,13 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="animation_button">
+           <property name="text">
+            <string>Animate</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>
@@ -696,8 +703,8 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>540</y>
-        <width>151</width>
+        <y>560</y>
+        <width>261</width>
         <height>23</height>
        </rect>
       </property>

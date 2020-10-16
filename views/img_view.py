@@ -1,7 +1,10 @@
+import time
 from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
-from matplotlib.widgets import LassoSelector, Cursor
+from matplotlib.widgets import Cursor
+import matplotlib.animation as animation
+from matplotlib import pyplot as plt
 # from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 # from matplotlib.path import Path
 # from matplotlib import patches as patches
@@ -10,7 +13,6 @@ from matplotlib.widgets import LassoSelector, Cursor
 class ImgView(QWidget):
 	
 	def __init__(self, parent=None):
-
 		QWidget.__init__(self, parent)
 		self.ix, self.iy = 0, 0
 		self.fig = Figure(frameon=False)
@@ -78,10 +80,9 @@ class ImgView(QWidget):
 					self.ax.scatter(point.ix, point.iy, edgecolors='w', color=point.color, alpha=1)
 				self.ax.text(point.ix+1,point.iy+1, point.name,fontsize=10,color='w')
 
-	def show_img(self, img,**kwargs):
-		self.img = img
+	def show_img(self, img, **kwargs):
 		self.ax.clear()
-		self.ax.imshow(self.img, **kwargs)
+		self.ax.imshow(img, **kwargs)
 		self.paint_points()
 		self.ax.set_axis_off()
 		self.canvas.draw()
@@ -89,3 +90,30 @@ class ImgView(QWidget):
 		if self.app.options['axes']:
 			self.cursor = Cursor(self.canvas.axes, useblit=False, 
 				color='red', linewidth=0.75, linestyle='--')
+
+	def animation(self, since, to, progress, **kwargs):
+		frames = []
+		prog = 0
+		range_tuple = tuple(range(since, to))
+		progress.setRange(prog, len(range_tuple))		
+		for i in range_tuple:
+			progress.setValue(prog)
+			im = self.show_img(self.app.thz_img.get_img(i), animated=True, **kwargs)
+			self.app.pulse_view.set_time_point_by_row(i, self.app.pulse)
+			frames.append([im])
+			time.sleep(0.00001)
+			prog += 1
+			if not self.app.animating:
+				break
+
+	def animated(self, since, to, progress, **kwargs):
+		fig = plt.figure()
+		ims = []
+		for i in range(850, 900):
+			img = self.app.thz_img.get_img(i)
+			im = plt.imshow(img, **kwargs)
+			ims.append([im])
+		ani = animation.ArtistAnimation(fig, ims, interval=1, blit=True,repeat=True)
+		writer = animation.FFMpegWriter(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+		ani.save("movie.mp4", writer=writer)
+		# plt.show()
