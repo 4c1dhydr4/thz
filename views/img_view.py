@@ -1,14 +1,14 @@
-import time
+import os
 from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.widgets import Cursor
 import matplotlib.animation as animation
 from matplotlib import pyplot as plt
-# from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
-# from matplotlib.path import Path
-# from matplotlib import patches as patches
-# import random
+from settings import (ANIMATIOS_DIR, FFMPEG_PATH,)
+import matplotlib as mpl
+
+mpl.rcParams['animation.ffmpeg_path'] = FFMPEG_PATH
 
 class ImgView(QWidget):
 	
@@ -92,28 +92,23 @@ class ImgView(QWidget):
 				color='red', linewidth=0.75, linestyle='--')
 
 	def animation(self, since, to, progress, **kwargs):
-		frames = []
+		fig = plt.figure(figsize=(10,10))
+		ims = []
 		prog = 0
 		range_tuple = tuple(range(since, to))
-		progress.setRange(prog, len(range_tuple))		
+		progress.setRange(prog, len(range_tuple))	
 		for i in range_tuple:
 			progress.setValue(prog)
-			im = self.show_img(self.app.thz_img.get_img(i), animated=True, **kwargs)
+			im = plt.imshow(self.app.thz_img.get_img(i), animated=True, **kwargs)
+			ims.append([im])
 			self.app.pulse_view.set_time_point_by_row(i, self.app.pulse)
-			frames.append([im])
-			time.sleep(0.00001)
 			prog += 1
 			if not self.app.animating:
 				break
-
-	def animated(self, since, to, progress, **kwargs):
-		fig = plt.figure()
-		ims = []
-		for i in range(850, 900):
-			img = self.app.thz_img.get_img(i)
-			im = plt.imshow(img, **kwargs)
-			ims.append([im])
 		ani = animation.ArtistAnimation(fig, ims, interval=1, blit=True,repeat=True)
-		writer = animation.FFMpegWriter(fps=15, metadata=dict(artist='Me'), bitrate=1800)
-		ani.save("movie.mp4", writer=writer)
-		# plt.show()
+		writer = animation.FFMpegWriter(fps=15, metadata=dict(artist='THz Analysis Software'))
+		animation_file = ANIMATIOS_DIR + "\\movie.mp4"
+		progress.setRange(0, len(ims))
+		progress.setLabelText('Generating THz Video')
+		ani.save(animation_file, writer=writer, progress_callback=lambda i, n: progress.setValue(i))
+		os.system(animation_file)

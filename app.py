@@ -93,15 +93,12 @@ class App(object):
 		cmap = cmap if cmap != '' else None
 		interpolation = str(self.interpolation_cb.currentText())
 		self.animating = True
-		self.progress = set_progress('THz Animation Progress')
+		self.progress = set_progress('THz Animation by Time Point Progress')
 		self.progress.canceled.connect(self._stop_animation)
 		since = self.pulse_view.row
-		self.img_view.animated(
+		self.img_view.animation(
 			since, self.thz_img.n_waveforms, self.progress,
 			interpolation=interpolation, cmap=cmap)
-		# self.img_view.animation(
-		# 	since, self.thz_img.n_waveforms, self.progress,
-		# 	interpolation=interpolation, cmap=cmap)
 		self.progress.close()
 
 
