@@ -103,7 +103,10 @@ class App(object):
 	def _stop_animation(self):
 		self.animating = False
 
-	def _animation(self):
+	def _animation_pulse(self):
+		self._animation(pulse=True)
+
+	def _animation(self, pulse=False):
 		cmap = str(self.cmap_cb.currentText())
 		cmap = cmap if cmap != '' else None
 		interpolation = str(self.interpolation_cb.currentText())
@@ -111,10 +114,16 @@ class App(object):
 		self.progress = set_progress('THz Animation by Time Point Progress')
 		self.progress.canceled.connect(self._stop_animation)
 		since = self.pulse_view.row
-		self.img_view.animation(
-			since, self.thz_img.n_waveforms, self.progress,
-			interpolation=interpolation, cmap=cmap)
+		if pulse:
+			self.img_view.animation_pulsed(
+				since, self.thz_img.n_waveforms, self.progress,
+				interpolation=interpolation, cmap=cmap)
+		else:
+			self.img_view.animation(
+				since, self.thz_img.n_waveforms, self.progress,
+				interpolation=interpolation, cmap=cmap)
 		self.progress.close()
+		self._refresh()
 
 	def _set_main_definitions(self, MainWindow):
 		# Setear funciones a controles de interfaz con cada objeto (botones, sliders, etc.)
@@ -167,6 +176,7 @@ class App(object):
 		self.grid_checkbox.stateChanged.connect(self._set_options)
 
 		self.animation_button.clicked.connect(self._animation)
+		self.animation_pulse_button.clicked.connect(self._animation_pulse)
 		self.add_pixel_button.clicked.connect(self._add_pixel_to_list)
 		self.remove_pixel_button.clicked.connect(self._remove_pixel_to_list)
 		self.change_color_button.clicked.connect(self._change_color_pixel_list)

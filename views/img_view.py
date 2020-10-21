@@ -91,6 +91,15 @@ class ImgView(QWidget):
 			self.cursor = Cursor(self.canvas.axes, useblit=False, 
 				color='red', linewidth=0.75, linestyle='--')
 
+	def get_animation(self, fig, ims, progress):
+		ani = animation.ArtistAnimation(fig, ims, interval=1, blit=True,repeat=True)
+		writer = animation.FFMpegWriter(fps=15, metadata=dict(artist='THz Analysis Software'))
+		animation_file = ANIMATIOS_DIR + "\\movie.mp4"
+		progress.setRange(0, len(ims))
+		progress.setLabelText('Generating THz Video')
+		ani.save(animation_file, writer=writer, progress_callback=lambda i, n: progress.setValue(i))
+		os.system(animation_file)
+
 	def animation(self, since, to, progress, **kwargs):
 		fig = plt.figure(figsize=(10,10))
 		ims = []
@@ -105,10 +114,25 @@ class ImgView(QWidget):
 			prog += 1
 			if not self.app.animating:
 				break
-		ani = animation.ArtistAnimation(fig, ims, interval=1, blit=True,repeat=True)
-		writer = animation.FFMpegWriter(fps=15, metadata=dict(artist='THz Analysis Software'))
-		animation_file = ANIMATIOS_DIR + "\\movie.mp4"
-		progress.setRange(0, len(ims))
-		progress.setLabelText('Generating THz Video')
-		ani.save(animation_file, writer=writer, progress_callback=lambda i, n: progress.setValue(i))
-		os.system(animation_file)
+		self.get_animation(fig, ims, progress)
+
+	def animation_pulsed(self, since, to, progress, **kwargs):
+		fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(10, 10))
+		ax0.set_title('THz Image')
+		ax1.set_title('THz Pulse')
+		data = []
+		prog = 0
+		ims = []
+		range_tuple = tuple(range(since, to))
+		progress.setRange(prog, len(range_tuple))
+		for i in range_tuple:
+			data.append(self.app.pulse[i])
+			progress.setValue(prog)
+			im1 = ax0.imshow(self.app.thz_img.get_img(i), animated=True, **kwargs)
+			im2, = ax1.plot(data, color='k')
+			ims.append([im1, im2])
+			self.app.pulse_view.set_time_point_by_row(i, self.app.pulse)
+			prog += 1
+			if not self.app.animating:
+				break
+		self.get_animation(fig, ims, progress)
