@@ -21,4 +21,3 @@ def show_message(icon='warning', title="Mensaje", text="Texto", info="Extra Info
 
 def get_rand_color():
 	return "#{:06x}".format(random.randint(0, 0xFFFFFF))
-

@@ -2,6 +2,7 @@ import numpy as np
 from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
+from thz import (Pulse,)
 
 class PlotsView(QWidget):
 	
@@ -29,7 +30,7 @@ class PlotsView(QWidget):
 		pass
 
 	def refresh(self, data):
-		self.pulse = data
+		self.pulse = Pulse(data, self.app.thz_img.reference)
 		self.plot_pulse()
 		self.plot_freq()
 		self.plot_trans()
@@ -41,37 +42,37 @@ class PlotsView(QWidget):
 		self.ax1.clear()
 		if self.app.options['grid']:
 			self.ax1.grid(True)
-		self.ax1.plot(self.pulse, 
+		self.ax1.plot(self.pulse.data, 
 			color='red', linewidth=0.5, markersize=12)
 		self.ax1.set_xlabel('Optical Delay (ps)')
 		self.ax1.set_ylabel('Terahertz Signal')
 
 	def plot_freq(self):
-		self.fft = np.abs(np.fft.fft(self.pulse))[0:400]
-		self.f = np.linspace(0,4,self.fft.shape[0])
+		fft, freq = self.pulse.get_frequency_domain(self.app.length)
 		self.ax2.clear()
 		if self.app.options['grid']:
 			self.ax2.grid(True)
-		self.ax2.semilogy(self.f, self.fft, 
+		self.ax2.semilogy(freq, fft, 
 			color='black', linewidth=0.5, markersize=12)
 		self.ax2.set_xlabel('Frequency (THz)')
 		self.ax2.set_ylabel('Electric Field (a.u)')
 
 	def plot_trans(self):
-		self.T = self.pulse[0:400]/self.fft
+		transmittance, freq = self.pulse.get_transmittance_domain(self.app.length)
 		self.ax3.clear()
 		if self.app.options['grid']:
 			self.ax3.grid(True)
-		self.ax3.semilogy(self.T,
+		self.ax3.semilogy(freq, transmittance,
 			color='green', linewidth=0.5, markersize=12)
 		self.ax3.set_xlabel('Frequency (THz)')
 		self.ax3.set_ylabel('Transmitance')
 
 	def plot_abs(self):
+		absorbance, freq = self.pulse.get_absorbance(self.app.length)
 		self.ax4.clear()
 		if self.app.options['grid']:
 			self.ax4.grid(True)
-		self.ax4.semilogy(self.pulse, 
+		self.ax4.semilogy(freq, absorbance,
 			color='blue', linewidth=0.5, markersize=12)
 		self.ax4.set_xlabel('Frequency (THz)')
-		self.ax4.set_ylabel('Absorvance')
+		self.ax4.set_ylabel('Absorbance')

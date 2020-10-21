@@ -5,7 +5,8 @@ from components.combos import (fill_interpolation_cb, fill_cmaptype_cb, change_c
 from components.progress import (set_progress,)
 from components.tools import (show_message,)
 from models.pixel import (save_pixel, refresh_pixels_tree, selected_pixels_tree, get_pixels_by_id)
-from components.options import (set_checkboxes_options, set_pulse_plot_options,)
+from components.options import (set_checkboxes_options, set_pulse_plot_options,
+	set_frequency_plot_options, set_transmittance_plot_options, set_absorbance_plot_options,)
 
 class App(object):
 
@@ -74,9 +75,11 @@ class App(object):
 		# self._refresh()
 
 	def _plot_pixels(self):
-		pixels = selected_pixels_tree(self)
-		self.pulse_plot.plot_pulses(pixels)
-		self.frequency_plot.plot_pulses(pixels)
+		self.pixels = selected_pixels_tree(self)
+		self.pulse_plot.plot_pulses(self.pixels)
+		self.frequency_plot.plot_freq(self.pixels)
+		self.transmittance_plot.plot_transmittances(self.pixels)
+		self.absorbance_plot.plot_absorbance(self.pixels)
 		show_message('info', 
 			'Pixel Analyze', 
 			'Pixels loaded successful', 'Go to Analyze Tabs')
@@ -84,6 +87,18 @@ class App(object):
 	def _pp_apply_changes(self):
 		set_pulse_plot_options(self)
 		self.pulse_plot.plot_pulses(selected_pixels_tree(self))
+
+	def _fd_apply_changes(self):
+		set_frequency_plot_options(self)
+		self.frequency_plot.plot_freq(selected_pixels_tree(self))
+
+	def _t_apply_changes(self):
+		set_transmittance_plot_options(self)
+		self.transmittance_plot.plot_transmittances(selected_pixels_tree(self))
+
+	def _abs_apply_changes(self):
+		set_absorbance_plot_options(self)
+		self.absorbance_plot.plot_absorbance(selected_pixels_tree(self))
 
 	def _stop_animation(self):
 		self.animating = False
@@ -101,11 +116,11 @@ class App(object):
 			interpolation=interpolation, cmap=cmap)
 		self.progress.close()
 
-
 	def _set_main_definitions(self, MainWindow):
 		# Setear funciones a controles de interfaz con cada objeto (botones, sliders, etc.)
 		self.first_load = True
 		self.thz_img = None
+		self.length = 300
 
 		self.tab.setCurrentIndex(0)
 
@@ -122,7 +137,22 @@ class App(object):
 		self.pp_grid_checkbox.setChecked(True)
 		self.pp_legend_checkbox.setChecked(True)
 		self.pp_reload_button.clicked.connect(self._pp_apply_changes)
-		
+
+		#Frequency
+		self.fd_grid_checkbox.setChecked(True)
+		self.fd_legend_checkbox.setChecked(True)
+		self.fd_reload_button.clicked.connect(self._fd_apply_changes)
+
+		#Transmittance
+		self.t_grid_checkbox.setChecked(True)
+		self.t_legend_checkbox.setChecked(True)
+		self.t_reload_button.clicked.connect(self._t_apply_changes)
+
+		#Absorbance
+		self.abs_grid_checkbox.setChecked(True)
+		self.abs_legend_checkbox.setChecked(True)
+		self.abs_reload_button.clicked.connect(self._abs_apply_changes)
+
 		self.load_button.clicked.connect(self._load_test)
 		self.cmaptype_cb.currentTextChanged.connect(self._cmaptype)
 		self.cmap_cb.currentTextChanged.connect(self._imaging)
@@ -165,10 +195,23 @@ class App(object):
 			'legend':True,
 			'reference':False,
 		}
-		self.fq_options = {
+		self.fd_options = {
 			'grid':True,
 			'legend':True,
 			'reference':False,
+		}
+		self.t_options = {
+			'grid':True,
+			'legend':True,
+			'reference':False,
+		}
+		self.abs_options = {
+			'grid':True,
+			'legend':True,
+		}
+		self.plots_options = {
+			'grid':True,
+			'legend':True,
 		}
 		self.first_load = False
 
@@ -181,6 +224,8 @@ class App(object):
 		self.plots_view.app = self
 		self.pulse_plot.app = self
 		self.frequency_plot.app = self
+		self.transmittance_plot.app = self
+		self.absorbance_plot.app = self
 		self.pulse_view.onload()
 		self.plots_view.onload()
 		self.sample_info_text.setPlainText(self.thz_img.get_image_details())

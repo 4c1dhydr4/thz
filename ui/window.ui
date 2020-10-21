@@ -27,15 +27,15 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>710</x>
       <y>-10</y>
-      <width>451</width>
+      <width>351</width>
       <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <pointsize>13</pointsize>
      </font>
     </property>
     <property name="text">
@@ -52,7 +52,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="tab_1">
      <attribute name="title">
@@ -502,14 +502,7 @@
          <item>
           <widget class="QPushButton" name="export_button">
            <property name="text">
-            <string>Export Data</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="animation_button">
-           <property name="text">
-            <string>Animate</string>
+            <string>Export Pixels</string>
            </property>
           </widget>
          </item>
@@ -727,6 +720,181 @@
        </rect>
       </property>
      </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_10">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>430</y>
+        <width>111</width>
+        <height>84</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <item>
+        <widget class="QLabel" name="label_15">
+         <property name="text">
+          <string>Plot Options:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="fd_reference_checkbox">
+         <property name="text">
+          <string>Show Reference</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="fd_legend_checkbox">
+         <property name="text">
+          <string>Show Legend</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="fd_grid_checkbox">
+         <property name="text">
+          <string>Show Grid</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QPushButton" name="fd_reload_button">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>560</y>
+        <width>131</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Apply Changes</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_5">
+     <attribute name="title">
+      <string>Transmittance</string>
+     </attribute>
+     <widget class="TransmittancePlot" name="transmittance_plot" native="true">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>831</width>
+        <height>421</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="t_reload_button">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>560</y>
+        <width>131</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Apply Changes</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_11">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>430</y>
+        <width>111</width>
+        <height>84</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_11">
+       <item>
+        <widget class="QLabel" name="label_16">
+         <property name="text">
+          <string>Plot Options:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="t_legend_checkbox">
+         <property name="text">
+          <string>Show Legend</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="t_grid_checkbox">
+         <property name="text">
+          <string>Show Grid</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_6">
+     <attribute name="title">
+      <string>Absorbance</string>
+     </attribute>
+     <widget class="AbsorbancePlot" name="absorbance_plot" native="true">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>831</width>
+        <height>421</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_7">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>430</y>
+        <width>111</width>
+        <height>84</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Plot Options:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="abs_legend_checkbox">
+         <property name="text">
+          <string>Show Legend</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="abs_grid_checkbox">
+         <property name="text">
+          <string>Show Grid</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QPushButton" name="abs_reload_button">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>560</y>
+        <width>131</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Apply Changes</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -747,49 +915,53 @@
        <rect>
         <x>10</x>
         <y>490</y>
-        <width>251</width>
-        <height>61</height>
+        <width>131</width>
+        <height>91</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
         <widget class="QLabel" name="label_10">
          <property name="text">
-          <string>Plots Tools:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_7">
-         <item>
-          <widget class="QPushButton" name="export_plots_button">
-           <property name="text">
-            <string>Export Plots</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="verticalLayoutWidget_7">
-      <property name="geometry">
-       <rect>
-        <x>290</x>
-        <y>490</y>
-        <width>101</width>
-        <height>61</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="verticalLayout_7">
-       <item>
-        <widget class="QLabel" name="label_11">
-         <property name="text">
           <string>Plots Options:</string>
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="plots_reference_checkbox">
+         <property name="text">
+          <string>Show Reference</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="plots_legend_checkbox">
+         <property name="text">
+          <string>Show Legend</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="plots_grid_checkbox">
+         <property name="text">
+          <string>Show Grid</string>
+         </property>
+        </widget>
+       </item>
       </layout>
+     </widget>
+     <widget class="QPushButton" name="export_plots_button">
+      <property name="geometry">
+       <rect>
+        <x>270</x>
+        <y>490</y>
+        <width>111</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Export Plots</string>
+      </property>
      </widget>
     </widget>
    </widget>
@@ -804,13 +976,44 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_9">
      <item>
-      <widget class="QPushButton" name="zoom_button">
+      <widget class="QPushButton" name="animation_button">
        <property name="text">
-        <string>Zoom</string>
+        <string>Animate</string>
        </property>
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QLabel" name="label_17">
+    <property name="geometry">
+     <rect>
+      <x>1190</x>
+      <y>10</y>
+      <width>151</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Developed by Luis Quiroz</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_18">
+    <property name="geometry">
+     <rect>
+      <x>1220</x>
+      <y>30</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>quirozburga@gmail.com</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -854,6 +1057,18 @@
    <class>FrequencyPlot</class>
    <extends>QWidget</extends>
    <header>frequencyplot.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AbsorbancePlot</class>
+   <extends>QWidget</extends>
+   <header>absorbanceplot.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TransmittancePlot</class>
+   <extends>QWidget</extends>
+   <header>transmittanceplot.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

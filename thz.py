@@ -104,12 +104,22 @@ class Pulse():
 	data = None #Numpy mx1
 	time_vector = None
 
-	def __init__(self, data):
+	def __init__(self, data, reference):
 		self.data = data
+		self.reference = reference
 		self.fft = np.abs(np.fft.fft(self.data))
+		self.fft_ref = np.abs(np.fft.fft(self.reference))
+		self.transmittance = self.fft/np.abs(np.fft.fft(self.reference))
+		self.absorbance = np.abs(np.fft.fft(self.reference))/self.fft
 
 	def set_time_vector(self, time_0, time_n):
 		self.time_vector = np.linspace(time_0, time_n, data.shape[0])
 
 	def get_frequency_domain(self, n):
 		return self.fft[0:n], np.linspace(0,8,n)
+
+	def get_transmittance_domain(self, n):
+		return self.transmittance[0:n], np.linspace(0,8,n)
+
+	def get_absorbance(self, n):
+		return self.absorbance[0:n], np.linspace(0,8,n)

@@ -19,7 +19,7 @@ class Pixel():
 		self.pulse = thz_img.get_column_index(ix, iy)
 		self.id = id
 		self.is_checked = True
-		self.thz_pulse = Pulse(self.pulse)
+		self.thz_pulse = Pulse(self.pulse, thz_img.reference)
 
 	def change_color(self):
 		self.color = get_rand_color()

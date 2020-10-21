@@ -51,3 +51,42 @@ def set_pulse_plot_options(self):
 		self.pulse_plot.set_time_vector(time_0, time_n)
 	except:
 		print("time range wrong")
+
+
+def set_frequency_plot_options(self):
+	if self.fd_grid_checkbox.isChecked():
+		self.fd_options['grid'] = True
+	else:
+		self.fd_options['grid'] = False
+
+	if self.fd_legend_checkbox.isChecked():
+		self.fd_options['legend'] = True
+	else:
+		self.fd_options['legend'] = False
+
+	if self.fd_reference_checkbox.isChecked():
+		self.fd_options['reference'] = True
+	else:
+		self.fd_options['reference'] = False
+
+def set_transmittance_plot_options(self):
+	if self.t_grid_checkbox.isChecked():
+		self.t_options['grid'] = True
+	else:
+		self.t_options['grid'] = False
+
+	if self.t_legend_checkbox.isChecked():
+		self.t_options['legend'] = True
+	else:
+		self.t_options['legend'] = False
+
+def set_absorbance_plot_options(self):
+	if self.abs_grid_checkbox.isChecked():
+		self.abs_options['grid'] = True
+	else:
+		self.abs_options['grid'] = False
+
+	if self.abs_legend_checkbox.isChecked():
+		self.abs_options['legend'] = True
+	else:
+		self.abs_options['legend'] = False

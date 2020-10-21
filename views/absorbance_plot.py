@@ -3,11 +3,11 @@ from PyQt5.QtWidgets import *
 from models.pixel import (get_pixels_by_id,)
 from models.plot import (Plot,)
 
-class FrequencyPlot(Plot):
+class AbsorbancePlot(Plot):
 	def __init__(self, parent=None):
 		Plot.__init__(self, parent)
 		self.ax.set_xlabel('Frequency (THz)')
-		self.ax.set_ylabel('Terahertz Signal')
+		self.ax.set_ylabel('Absorbance')
 		self.time_vector = None
 		self.has_time_vector = False
 
@@ -16,19 +16,14 @@ class FrequencyPlot(Plot):
 			self.app.thz_img.n_waveforms)
 		self.has_time_vector = True
 
-	def plot_freq(self, ids):
+	def plot_absorbance(self, ids):
 		self.ax.clear()
 		for id in ids:
 			px = get_pixels_by_id(self.app, id)
-			fft, freq = px.thz_pulse.get_frequency_domain(self.app.length)
-			self.ax.semilogy(freq, fft, color=px.color, 
+			absorbance, freq = px.thz_pulse.get_absorbance(self.app.length)
+			self.ax.semilogy(freq, absorbance, color=px.color, 
 				linewidth=1, markersize=2, label=px.name)
-			self.ax.set_xlabel('Frequency (THz)')
-		
-		if self.app.fd_options['reference']:
-			self.ax.plot(freq, px.thz_pulse.fft_ref[:self.app.length], color='k', 
-				linewidth=.8, markersize=2, label='Reference Pulse')
-
-		self.ax.set_ylabel('Terahertz Signal')
-		self.set_plot_options(self.app.fd_options)
+		self.ax.set_xlabel('Frequency (THz)')		
+		self.ax.set_ylabel('Absorbance')
+		self.set_plot_options(self.app.abs_options)
 		self.draw()
