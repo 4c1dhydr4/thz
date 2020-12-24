@@ -1,3 +1,4 @@
+import numpy as np
 from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
@@ -10,7 +11,10 @@ class PulseView(Plot):
 		Plot.__init__(self, parent, toolbar=False)
 		self.ax.set_xlabel('Waveform')
 		self.ax.set_ylabel('Terahertz Signal')
+		self.time_vector = None
+		self.has_time_vector = False
 		self.row = 0
+		self.ix = 0.0
 		self.canvas.mpl_connect('button_press_event', self.onclick)
 		self.canvas.mpl_connect('motion_notify_event', self.onmove)
 		self.canvas.mpl_connect('scroll_event', self.onscroll)
@@ -18,10 +22,10 @@ class PulseView(Plot):
 	def onload(self):
 		self.max_row = self.app.thz_img.dataset.shape[0]-1
 
-	def set_time_point_by_row(self, row, data):
-		self.row = row
-		self.plot_time_point(data, text=False)
-		self.draw()
+	def set_time_vector(self, time_0, time_n):
+		self.time_vector = np.linspace(time_0, time_n, 
+			self.app.thz_img.n_waveforms)
+		self.has_time_vector = True
 
 	def refresh(self, data, onload=False):
 		if onload:
@@ -31,11 +35,38 @@ class PulseView(Plot):
 		self.set_app_values()
 
 	def onclick(self,event):
-		ix = int(event.xdata) if event.xdata is not None else None
-		if ix is not None:
-			if ix >= 0 and ix <= self.max_row:
-				self.row = ix
-				self.refresh(self.app.pulse)
+		if self.has_time_vector:
+			self.ix = float(event.xdata) if event.xdata is not None else None
+		else:
+			self.ix = int(event.xdata) if event.xdata is not None else None
+		if self.ix is not None:
+			if self.has_time_vector:
+				if self.ix >= min(self.time_vector) and self.ix <= max(self.time_vector):
+					self.row = self.search_row(self.ix)
+			else:
+				if self.ix >= 0 and self.ix <= self.max_row:
+					self.row = self.ix
+			self.refresh(self.app.pulse)
+
+	def search_row(self, ix):
+		index = 0
+		for i in self.time_vector:
+			if ix < i:
+				return index
+			index += 1
+
+	def search_ix(self, row, data):
+		index = 0
+		for i in data:
+			if row == i:
+				return self.time_vector[row]
+			index += 1
+
+	def set_time_point_by_row(self, row, data):
+		self.row = row
+		self.ix = self.search_ix(row,data)
+		self.plot_time_point(data, text=False)
+		self.draw()
 
 	def onmove(self, event):
 		if not event.inaxes:
@@ -46,13 +77,21 @@ class PulseView(Plot):
 	def onscroll(self, event):
 		if event.button == 'up':
 			self.row += 1
+			if self.has_time_vector:
+				self.ix += .1
 		elif event.button == 'down':
 			self.row -= 1
+			if self.has_time_vector:
+				self.ix -= .1
 
 		if self.row < 0:
 			self.row = 0
+			if self.has_time_vector:
+				self.ix += min(self.time_vector)
 		elif self.row > self.max_row:
 			self.row = self.max_row
+			if self.has_time_vector:
+				self.ix += max(self.time_vector)
 
 		self.refresh(self.app.pulse)
 
@@ -67,7 +106,7 @@ class PulseView(Plot):
 
 	def plot_time_point(self, data, text=True):
 		if self.app.options['time_point']:
-			x_points = (self.row, self.row)
+			x_points = (self.ix, self.ix)
 			y_points = (min(data), max(data))
 			self.ax.plot(x_points, y_points,'r--', lw=.5)
 			if text:
@@ -79,13 +118,18 @@ class PulseView(Plot):
 					rotation='vertical',
 					rotation_mode='anchor')
 
+
 	def plot(self, data, **kwargs):
 		self.ax.clear()
-		self.ax.grid(True)
-		self.ax.plot(data, 
-			color='black', linewidth=0.5, **kwargs)
+		if self.app.options['grid']:
+			self.ax.grid(True)
+		if self.has_time_vector:
+			self.ax.plot(self.time_vector, data, color='black', linewidth=0.5, **kwargs)
+			self.ax.set_xlabel('Optical Delay (ps)')
+		else:
+			self.ax.plot(data, color='black', linewidth=0.5, **kwargs)
+			self.ax.set_xlabel('Waveform')
 		self.plot_time_point(data)
-		self.ax.set_xlabel('Waveform')
 		self.ax.set_ylabel('Terahertz Signal')
 		self.set_cursor()
 		self.draw()

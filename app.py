@@ -87,6 +87,7 @@ class App(object):
 	def _pp_apply_changes(self):
 		set_pulse_plot_options(self)
 		self.pulse_plot.plot_pulses(selected_pixels_tree(self))
+		self._refresh()
 
 	def _fd_apply_changes(self):
 		set_frequency_plot_options(self)

@@ -45,10 +45,12 @@ def set_pulse_plot_options(self):
 	else:
 		self.pp_options['reference'] = False
 
+	time_0 = float(self.time_start_line.text())
+	time_n = float(self.time_end_line.text())
+	self.pulse_plot.set_time_vector(time_0, time_n)
+	self.pulse_view.set_time_vector(time_0, time_n)
 	try:
-		time_0 = float(self.time_start_line.text())
-		time_n = float(self.time_end_line.text())
-		self.pulse_plot.set_time_vector(time_0, time_n)
+		pass
 	except:
 		print("time range wrong")
 
