@@ -1,4 +1,4 @@
-# pyuic5 ui/window.ui>tmp.py
+# -*- co# pyuic5 ui/window.ui>tmp.py
 from PyQt5 import QtCore, QtGui, QtWidgets
 from views.img_view import ImgView
 from views.pulse_view import PulseView
@@ -377,7 +377,7 @@ class Ui_MainWindow(App):
         self.export_plots_button.setObjectName("export_plots_button")
         self.tab.addTab(self.tab_2, "")
         self.horizontalLayoutWidget_7 = QtWidgets.QWidget(self.centralwidget)
-        self.horizontalLayoutWidget_7.setGeometry(QtCore.QRect(10, 610, 265, 31))
+        self.horizontalLayoutWidget_7.setGeometry(QtCore.QRect(10, 610, 491, 31))
         self.horizontalLayoutWidget_7.setObjectName("horizontalLayoutWidget_7")
         self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_7)
         self.horizontalLayout_9.setContentsMargins(0, 0, 0, 0)
@@ -388,15 +388,6 @@ class Ui_MainWindow(App):
         self.animation_pulse_button = QtWidgets.QPushButton(self.horizontalLayoutWidget_7)
         self.animation_pulse_button.setObjectName("animation_pulse_button")
         self.horizontalLayout_9.addWidget(self.animation_pulse_button)
-        self.label_17 = QtWidgets.QLabel(self.centralwidget)
-        self.label_17.setGeometry(QtCore.QRect(1190, 10, 151, 21))
-        font = QtGui.QFont()
-        font.setPointSize(10)
-        self.label_17.setFont(font)
-        self.label_17.setObjectName("label_17")
-        self.label_18 = QtWidgets.QLabel(self.centralwidget)
-        self.label_18.setGeometry(QtCore.QRect(1220, 30, 121, 16))
-        self.label_18.setObjectName("label_18")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1350, 21))
@@ -475,5 +466,3 @@ class Ui_MainWindow(App):
         self.tab.setTabText(self.tab.indexOf(self.tab_2), _translate("MainWindow", "Plots"))
         self.animation_button.setText(_translate("MainWindow", "Generate Animation"))
         self.animation_pulse_button.setText(_translate("MainWindow", "Generate Animation with Pulse"))
-        self.label_17.setText(_translate("MainWindow", "Developed by Luis Quiroz"))
-        self.label_18.setText(_translate("MainWindow", "quirozburga@gmail.com"))

@@ -57,12 +57,12 @@ class THZImage():
 					pass
 				else:
 					try:
-						lrow = np.array(list(map(float, row[1::])))
+						lrow = np.array(list(map(np.float64, row[1::])))
 					except:
 						lrow = []
 					# lrow = np.array([float(d) for d in row[1::] if d != ''])
 					if len(lrow) != 0:
-						self.reference.append(float(row[0]))
+						self.reference.append(np.float64(row[0]))
 						self.dataset.append(lrow)
 				line += 1
 				if progress:

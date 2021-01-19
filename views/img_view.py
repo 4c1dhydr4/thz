@@ -1,4 +1,6 @@
 import os
+import subprocess
+from datetime import datetime
 from PyQt5.QtWidgets import *
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
@@ -92,13 +94,15 @@ class ImgView(QWidget):
 				color='red', linewidth=0.75, linestyle='--')
 
 	def get_animation(self, fig, ims, progress):
+		now = datetime.now()
 		ani = animation.ArtistAnimation(fig, ims, interval=1, blit=True,repeat=True)
 		writer = animation.FFMpegWriter(fps=15, metadata=dict(artist='THz Analysis Software'))
-		animation_file = ANIMATIOS_DIR + "\\movie.mp4"
+		time_stamp = '{}{}{}_{}-{}'.format(now.day, now.month, now.year, now.hour, now.minute)
+		animation_file = ANIMATIOS_DIR + "\\thz_video_{}.mp4".format(time_stamp)
 		progress.setRange(0, len(ims))
 		progress.setLabelText('Generating THz Video')
 		ani.save(animation_file, writer=writer, progress_callback=lambda i, n: progress.setValue(i))
-		os.system(animation_file)
+		subprocess.Popen('explorer ' + ANIMATIOS_DIR)
 
 	def animation(self, since, to, progress, **kwargs):
 		fig = plt.figure(figsize=(10,10))
@@ -120,7 +124,10 @@ class ImgView(QWidget):
 		fig, (ax0, ax1) = plt.subplots(ncols=2, figsize=(10, 10))
 		ax0.set_title('THz Image')
 		ax1.set_title('THz Pulse')
+		ax1.grid(True)
+		ax1.set_ylabel('Terahertz Signal')
 		data = []
+		x = []
 		prog = 0
 		ims = []
 		range_tuple = tuple(range(since, to))
@@ -129,9 +136,17 @@ class ImgView(QWidget):
 			data.append(self.app.pulse[i])
 			progress.setValue(prog)
 			im1 = ax0.imshow(self.app.thz_img.get_img(i), animated=True, **kwargs)
-			im2, = ax1.plot(data, color='k')
-			ims.append([im1, im2])
+			if self.app.pulse_view.has_time_vector:
+				x_value = self.app.pulse_view.time_vector[i]
+				x.append(x_value)
+				ax1.set_xlabel('Optical Delay (ps)')
+				im2, = ax1.plot(x, data, color='k')
+			else:
+				x.append(i)
+				ax1.set_xlabel('Waveform')
+				im2, = ax1.plot(x, data, color='k')
 			self.app.pulse_view.set_time_point_by_row(i, self.app.pulse)
+			ims.append([im1, im2])
 			prog += 1
 			if not self.app.animating:
 				break

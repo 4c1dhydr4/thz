@@ -34,6 +34,14 @@ class PulseView(Plot):
 		self.app._imaging()
 		self.set_app_values()
 
+	def set_mid(self, data):
+		if self.has_time_vector:
+			self.row = int(len(data)/2)
+			self.set_time_point_by_row(self.row, data)
+		else:
+			self.plot_time_point(data)
+		self.refresh(data)
+
 	def onclick(self,event):
 		if self.has_time_vector:
 			self.ix = float(event.xdata) if event.xdata is not None else None
@@ -56,11 +64,15 @@ class PulseView(Plot):
 			index += 1
 
 	def search_ix(self, row, data):
-		index = 0
+		if self.has_time_vector:
+			return self.time_vector[row]
+		else:
+			return row
+
+	def search_ix_data(self, row, data):
 		for i in data:
 			if row == i:
 				return self.time_vector[row]
-			index += 1
 
 	def set_time_point_by_row(self, row, data):
 		self.row = row

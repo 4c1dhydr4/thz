@@ -88,6 +88,7 @@ class App(object):
 		set_pulse_plot_options(self)
 		self.pulse_plot.plot_pulses(selected_pixels_tree(self))
 		self._refresh()
+		self.pulse_view.set_mid(self.pulse)
 
 	def _fd_apply_changes(self):
 		set_frequency_plot_options(self)
@@ -124,16 +125,14 @@ class App(object):
 				since, self.thz_img.n_waveforms, self.progress,
 				interpolation=interpolation, cmap=cmap)
 		self.progress.close()
-		self._refresh()
+		# self._refresh()
 
 	def _set_main_definitions(self, MainWindow):
 		# Setear funciones a controles de interfaz con cada objeto (botones, sliders, etc.)
 		self.first_load = True
 		self.thz_img = None
 		self.length = 300
-
 		self.tab.setCurrentIndex(0)
-
 		self.time_point_checkbox.setChecked(True)
 		self.axes_checkbox.setChecked(True)
 		self.point_checkbox.setChecked(True)
