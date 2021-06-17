@@ -14,8 +14,11 @@ class App(object):
 		self.img_view.refresh()
 
 	def _load_test(self):
-		# self.file_path = 'D:\\THz\\Samples\\3.csv'
-		self.file_path = 'D:\\THz\\Samples\\arandano_01.csv'
+		# self.clear_ui()
+		self.file_path, _ = QtWidgets.QFileDialog.getOpenFileName(
+			None, "Select a CSV THz Bidimensional dataset", 
+			"","CSV File (*.csv)"
+		)
 		self.progress = set_progress('Loading THz Image')
 		self.thz_img = THZImage(self.file_path, self.progress)
 		self.progress.close()
@@ -162,7 +165,10 @@ class App(object):
 		self.abs_legend_checkbox.setChecked(True)
 		self.abs_reload_button.clicked.connect(self._abs_apply_changes)
 
+		# Load Button
 		self.load_button.clicked.connect(self._load_test)
+		
+		# Image Processing buttons
 		self.cmaptype_cb.currentTextChanged.connect(self._cmaptype)
 		self.cmap_cb.currentTextChanged.connect(self._imaging)
 		self.interpolation_cb.currentTextChanged.connect(self._imaging)

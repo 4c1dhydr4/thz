@@ -1,0 +1,4 @@
+El software se encuentra en fase de continuo desarrollo. 
+*Para ejecutar la interfaz se debe tener instalado Python 3.7.x
+*Se debe instalar los requerimientos mediante python -m pip install -r requirements.txt
+*Para cargar un dataset (obtenido de TeraPulse) se debe modificar la ruta en la línea 18 del archivo app.py

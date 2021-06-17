@@ -100,7 +100,7 @@ class ImgView(QWidget):
 		time_stamp = '{}{}{}_{}-{}'.format(now.day, now.month, now.year, now.hour, now.minute)
 		animation_file = ANIMATIOS_DIR + "\\thz_video_{}.mp4".format(time_stamp)
 		progress.setRange(0, len(ims))
-		progress.setLabelText('Generating THz Video')
+		progress.setLabelText('Building THz Animation')
 		ani.save(animation_file, writer=writer, progress_callback=lambda i, n: progress.setValue(i))
 		subprocess.Popen('explorer ' + ANIMATIOS_DIR)
 

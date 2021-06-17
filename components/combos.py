@@ -37,3 +37,4 @@ def fill_image_view_mode_cb(cb):
 		'Absorbance',
 	)
 	cb.addItems(option)
+	cb.setCurrentIndex(0)
