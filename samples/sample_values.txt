@@ -1,0 +1,15 @@
+Arandano 04:
+	X offset	-8.625	ps
+	Optical delay extent	35.000	ps
+
+Arandano 03:
+	X offset	-8.640	ps	
+	Optical delay extent	35.000	ps	
+
+Arandano 02:
+	X offset	-8.590  ps	
+	Optical delay extent	35.000	ps	
+
+Arandano 01:
+	X offset	-8.622	ps	
+	Optical delay extent	35.000	ps	
